@@ -64,13 +64,14 @@ static int fqdn_added = 0;
 int aw_conf_handle(char * conffile)
 {
 	FILE * aw_confin;
+	extern FILE * yyin;
 	int ret;
 	
 	TRACE_ENTRY("%p", conffile);
 	
 	TRACE_DEBUG (INFO, "Parsing configuration file: %s...", conffile);
 	
-	aw_confin = fopen(conffile, "r");
+	yyin = aw_confin = fopen(conffile, "r");
 	if (aw_confin == NULL) {
 		ret = errno;
 		fd_log_debug("Unable to open extension configuration file %s for reading: %s", conffile, strerror(ret));
