@@ -205,6 +205,7 @@ AC_CONFIG_FILES([extensions/dict_nas_mipv6/Makefile])
 AC_CONFIG_FILES([extensions/dict_dcca/Makefile])
 AC_CONFIG_FILES([extensions/dict_dcca_3gpp/Makefile])
 AC_CONFIG_FILES([extensions/dict_s6a/Makefile])
+AC_CONFIG_FILES([extensions/acl_wl/Makefile])
 AC_CONFIG_FILES([extensions/Makefile])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
