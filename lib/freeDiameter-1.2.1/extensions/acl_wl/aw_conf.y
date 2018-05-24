@@ -68,7 +68,7 @@ int aw_conf_handle(char * conffile)
 	
 	TRACE_ENTRY("%p", conffile);
 	
-	TRACE_DEBUG (FULL, "Parsing configuration file: %s...", conffile);
+	TRACE_DEBUG (INFO, "Parsing configuration file: %s...", conffile);
 	
 	aw_confin = fopen(conffile, "r");
 	if (aw_confin == NULL) {
@@ -86,7 +86,7 @@ int aw_conf_handle(char * conffile)
 		TRACE_DEBUG (INFO, "Unable to parse the configuration file.");
 		return EINVAL;
 	} else {
-		TRACE_DEBUG(FULL, "Read %d FQDN entries successfully.", fqdn_added);
+		TRACE_DEBUG(INFO, "Read %d FQDN entries successfully.", fqdn_added);
 	}
 	
 	return 0;
@@ -130,7 +130,7 @@ conffile:		/* empty grammar is OK */
 			| conffile FQDN
 			{
 				fqdn_added++;
-				TRACE_DEBUG(FULL, "Added FQDN: %s", $2);
+				TRACE_DEBUG(INFO, "Added FQDN: %s", $2);
 			}
 			| conffile LEX_ERROR
 			{

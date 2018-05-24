@@ -343,6 +343,7 @@ int aw_tree_lookup(char * name, int * result)
 	struct fd_list * senti, *li;
 	
 	TRACE_ENTRY("%p %p", name, result);
+	TRACE_DEBUG(INFO, "[acl_wl] lookup %s", name);
 	CHECK_PARAMS(name && result);
 	
 	/* Initialize */
@@ -367,7 +368,7 @@ int aw_tree_lookup(char * name, int * result)
 		/* Check if we have a '*' element */
 		ti = (struct tree_item *)(senti->next);
 		if (ti->str == NULL) {
-			TRACE_DEBUG(ANNOYING, "[acl_wl] %s matched at label %d with a generic entry.", name, lbl + 1);
+			TRACE_DEBUG(INFO, "[acl_wl] %s matched at label %d with a generic entry.", name, lbl + 1);
 			*result = ti->flags;
 			return 0;
 		}
@@ -407,7 +408,7 @@ int aw_tree_lookup(char * name, int * result)
 	if (!ti->leaf)
 		return 0;
 	
-	TRACE_DEBUG(ANNOYING, "[acl_wl] %s matched exactly.", name);
+	TRACE_DEBUG(INFO, "[acl_wl] %s matched exactly.", name);
 	*result = ti->flags;
 	return 0;
 }
