@@ -367,8 +367,6 @@ status_t pcrf_db_final()
 
 static const char * fixed_qos_sweeden =
     "{"
-      "\"_id\" : { \"$oid\" : \"599eb929c850caabcbfdcd2b\" }," 
-      "\"imsi\" : \"001010123456819\","
       "\"pdn\" : ["
       "{ \"apn\" : \"internet\","
         "\"_id\" : { \"$oid\" : \"599eb929c850caabcbfdcd32\" },"
