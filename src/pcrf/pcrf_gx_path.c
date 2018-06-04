@@ -554,6 +554,7 @@ static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp,
         ret = fd_msg_avp_new(gx_feature_list, 0, &avpch1);
         d_assert(ret == 0, return EINVAL,);
         val.u32 = 0x0000000b;
+        val.u32 = 0x00000008; /* ZZZ - leave out rel7/8 and have only 10 */
         ret = fd_msg_avp_setvalue (avpch1, &val);
         d_assert(ret == 0, return EINVAL,);
         ret = fd_msg_avp_add (avp, MSG_BRW_LAST_CHILD, avpch1);
