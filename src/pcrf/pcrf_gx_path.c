@@ -554,12 +554,25 @@ static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp,
         ret = fd_msg_avp_new(gx_feature_list, 0, &avpch1);
         d_assert(ret == 0, return EINVAL,);
         val.u32 = 0x0000000b;
-        val.u32 = 0x00000008; /* ZZZ - leave out rel7/8 and have only 10 */
         ret = fd_msg_avp_setvalue (avpch1, &val);
         d_assert(ret == 0, return EINVAL,);
         ret = fd_msg_avp_add (avp, MSG_BRW_LAST_CHILD, avpch1);
         d_assert(ret == 0, return EINVAL,);
 
+        
+        /* venodr id */
+        {
+          struct dict_object * vendor_id;
+          fd_dict_search( fd_g_config->cnf_dict, DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Vendor-Id", &vendor_id, ENOENT);
+          ret = fd_msg_avp_new(vendor_id, 0, &avpch1);
+          d_assert(ret == 0, return EINVAL,);
+          val.u32 = 10415;
+          ret = fd_msg_avp_setvalue (avpch1, &val);
+          d_assert(ret == 0, return EINVAL,);
+          ret = fd_msg_avp_add (avp, MSG_BRW_LAST_CHILD, avpch1);
+          d_assert(ret == 0, return EINVAL,);
+        }
+        
         ret = fd_msg_avp_add(ans, MSG_BRW_LAST_CHILD, avp);
         d_assert(ret == 0, return EINVAL,);
     }

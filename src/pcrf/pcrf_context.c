@@ -384,16 +384,13 @@ static const char * fixed_qos_sweeden =
               "\"pre_emption_vulnerability\" : 0,"
               "\"pre_emption_capability\" : 0 } }"
         "} ],"
-        "\"ambr\" : {"
-          "\"downlink\" : { \"$numberLong\" : \"8375\" },"
-          "\"uplink\" : { \"$numberLong\" : \"41015\" } },"
         "\"qos\" : {"
           "\"qci\" : 9,"
           "\"arp\" : {"
             "\"priority_level\" : 8,"
-            "\"pre_emption_vulnerability\" : 1,"
+            "\"pre_emption_vulnerability\" : 0,"
             "\"pre_emption_capability\" : 1 } },"
-        "\"type\" : 2 }"
+        "\"type\" : 1 }"
       "]"
     "}";
 
