@@ -385,7 +385,7 @@ static const char * fixed_qos_sweeden =
               "\"pre_emption_capability\" : 0 } }"
         "} ],"
         "\"qos\" : {"
-          "\"qci\" : 9,"
+          "\"qci\" : 5,"
           "\"arp\" : {"
             "\"priority_level\" : 8,"
             "\"pre_emption_vulnerability\" : 0,"
