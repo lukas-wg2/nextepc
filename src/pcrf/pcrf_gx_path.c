@@ -1310,7 +1310,7 @@ static status_t encode_pcc_rule_definition(
 
     ret = fd_msg_avp_new(gx_rating_group, 0, &avpch2);
     d_assert(ret == 0, return CORE_ERROR,);
-    val.i32 = 0;
+    val.i32 = 1;
     ret = fd_msg_avp_setvalue(avpch2, &val);
     d_assert(ret == 0, return CORE_ERROR,);
     ret = fd_msg_avp_add(avpch1, MSG_BRW_LAST_CHILD, avpch2);
