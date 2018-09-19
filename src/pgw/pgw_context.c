@@ -7,7 +7,7 @@
 
 #include <mongoc.h>
 #include <yaml.h>
-#include "app/yaml_helper.h"
+#include "common/yaml_helper.h"
 
 #include "gtp/gtp_types.h"
 #include "gtp/gtp_conv.h"
@@ -17,7 +17,7 @@
 
 #include "fd/fd_lib.h"
 
-#include "app/context.h"
+#include "common/context.h"
 #include "pgw_context.h"
 
 static pgw_context_t self;
@@ -924,6 +924,8 @@ pgw_sess_t *pgw_sess_add(
         c_uint8_t *imsi, int imsi_len, c_int8_t *apn, 
         c_uint8_t pdn_type, c_uint8_t ebi)
 {
+    char buf1[CORE_ADDRSTRLEN];
+    char buf2[CORE_ADDRSTRLEN];
     pgw_sess_t *sess = NULL;
     pgw_bearer_t *bearer = NULL;
     pgw_subnet_t *subnet6 = NULL;
@@ -992,6 +994,10 @@ pgw_sess_t *pgw_sess_add(
     }
     else
         d_assert(0, return NULL, "Unsupported PDN Type(%d)", pdn_type);
+
+    d_trace(1, "UE IPv4:[%s] IPv6:[%s]\n",
+            sess->ipv4 ?  INET_NTOP(&sess->ipv4->addr, buf1) : "",
+            sess->ipv6 ?  INET6_NTOP(&sess->ipv6->addr, buf2) : "");
 
     /* Generate Hash Key : IMSI + APN */
     sess_hash_keygen(sess->hash_keybuf, &sess->hash_keylen,

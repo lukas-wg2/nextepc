@@ -6,8 +6,7 @@
 #include "core_lib.h"
 
 #include "context.h"
-
-#include "app.h"
+#include "application.h"
 
 #define DEFAULT_CONFIG_FILE_PATH SYSCONF_DIR PACKAGE "/nextepc.conf"
 #define DEFAULT_RUNTIME_DIR_PATH LOCALSTATE_DIR "run/"
@@ -89,7 +88,7 @@ void app_did_terminate(void)
     context_final();
 }
 
-status_t app_log_pid(const char *pid_path)
+status_t app_log_pid(const char *pid_path, const char *app_name)
 {
     file_t *pid_file = NULL;
     file_info_t finfo;

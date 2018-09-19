@@ -4,8 +4,10 @@
 #include "core_debug.h"
 #include "core_semaphore.h"
 
-#include "app/context.h"
-#include "app/app.h"
+#include "common/context.h"
+#include "common/application.h"
+
+#include "app_init.h"
 
 static semaphore_id pcrf_sem1 = 0;
 static semaphore_id pcrf_sem2 = 0;
@@ -22,7 +24,8 @@ static semaphore_id hss_sem2 = 0;
 static semaphore_id mme_sem1 = 0;
 static semaphore_id mme_sem2 = 0;
 
-status_t test_app_initialize(const char *config_path, const char *log_path)
+status_t test_app_initialize(
+        const char *config_path, const char *log_path, const char *pid_path)
 {
     pid_t pid;
     status_t rv;

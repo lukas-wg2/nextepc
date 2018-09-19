@@ -20,8 +20,8 @@
 #include "core_file.h"
 #include "fd/fd_lib.h"
 
-#include "app/app.h"
-#include "app/context.h"
+#include "common/application.h"
+#include "common/context.h"
 
 #include "testpacket.h"
 #include "testapp.h"
@@ -30,6 +30,8 @@
 #include "testutil.h"
 
 #include "pcscf_fd_path.h"
+
+abts_suite *test_volte(abts_suite *suite);
 
 const struct testlist alltests[] = {
     {test_volte},
@@ -60,7 +62,7 @@ void test_terminate(void)
 status_t test_initialize(int argc, const char *const argv[], char *config_path)
 {
     status_t rv;
-    char dir[C_PATH_MAX];
+    char dir[C_PATH_MAX/2];
     char conf[C_PATH_MAX];
 
     if (config_path)
@@ -80,7 +82,7 @@ status_t test_initialize(int argc, const char *const argv[], char *config_path)
     atexit(test_terminate);
 
     core_initialize();
-    rv = test_app_initialize(conf, NULL);
+    rv = test_app_initialize(conf, NULL, NULL);
     if (rv != CORE_OK)
     {
         d_error("test_app_initialize() failed");

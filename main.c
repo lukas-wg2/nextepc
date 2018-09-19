@@ -9,7 +9,8 @@
 #include "core_signal.h"
 
 /* Server */
-#include "app.h"
+#include "common/application.h"
+#include "app_init.h"
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdate-time"
@@ -142,8 +143,7 @@ int main(int argc, char *argv[])
     atexit(terminate);
 
     core_initialize();
-    app_log_pid(pid_path);
-    rv = app_initialize(config_path, log_path);
+    rv = app_initialize(config_path, log_path, pid_path);
     if (rv != CORE_OK)
     {
         if (rv == CORE_EAGAIN)

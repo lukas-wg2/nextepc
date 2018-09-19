@@ -4,15 +4,19 @@
 #include "core_signal.h"
 #include "core_semaphore.h"
 
-#include "app/context.h"
-#include "app/app.h"
+#include "common/context.h"
+#include "common/application.h"
 
-const char *app_name = "mme";
+#include "app_init.h"
 
-status_t app_initialize(const char *config_path, const char *log_path)
+status_t app_initialize(
+        const char *config_path, const char *log_path, const char *pid_path)
 {
     status_t rv;
     int app = 0;
+
+    rv = app_log_pid(pid_path, "mme");
+    if (rv != CORE_OK) return rv;
 
     rv = app_will_initialize(config_path, log_path);
     if (rv != CORE_OK) return rv;

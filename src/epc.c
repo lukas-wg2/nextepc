@@ -4,8 +4,10 @@
 #include "core_debug.h"
 #include "core_semaphore.h"
 
-#include "app/context.h"
-#include "app/app.h"
+#include "common/context.h"
+#include "common/application.h"
+
+#include "app_init.h"
 
 static semaphore_id pcrf_sem1 = 0;
 static semaphore_id pcrf_sem2 = 0;
@@ -19,13 +21,15 @@ static semaphore_id sgw_sem2 = 0;
 static semaphore_id hss_sem1 = 0;
 static semaphore_id hss_sem2 = 0;
 
-const char *app_name = "epc";
-
-status_t app_initialize(const char *config_path, const char *log_path)
+status_t app_initialize(
+        const char *config_path, const char *log_path, const char *pid_path)
 {
     pid_t pid;
     status_t rv;
     int app = 0;
+
+    rv = app_log_pid(pid_path, "epc");
+    if (rv != CORE_OK) return rv;
 
     rv = app_will_initialize(config_path, log_path);
     if (rv != CORE_OK) return rv;

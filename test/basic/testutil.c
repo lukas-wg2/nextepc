@@ -19,11 +19,23 @@
 #include "core_semaphore.h"
 #include "fd/fd_lib.h"
 
-#include "app/app.h"
-#include "app/context.h"
+#include "common/application.h"
+#include "common/context.h"
+
+#include "app_init.h"
+
 #include "testpacket.h"
 #include "abts.h"
 #include "testutil.h"
+
+abts_suite *test_s1ap_message(abts_suite *suite);
+abts_suite *test_nas_message(abts_suite *suite);
+abts_suite *test_gtp_message(abts_suite *suite);
+abts_suite *test_security(abts_suite *suite);
+abts_suite *test_s1setup(abts_suite *suite);
+abts_suite *test_attach(abts_suite *suite);
+abts_suite *test_volte(abts_suite *suite);
+abts_suite *test_handover(abts_suite *suite);
 
 const struct testlist alltests[] = {
     {test_s1ap_message},
@@ -66,7 +78,7 @@ status_t test_initialize(int argc, const char *const argv[], char *config_path)
     atexit(test_terminate);
 
     core_initialize();
-    rv = app_initialize(config_path, NULL);
+    rv = app_initialize(config_path, NULL, NULL);
     if (rv != CORE_OK)
     {
         d_error("app_initialize() failed");

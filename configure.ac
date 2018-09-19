@@ -8,7 +8,7 @@ dnl This program is distributed in the hope that it will be useful, but
 dnl WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
 dnl implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-AC_INIT([NextEPC], [0.3.8], [acetcom@gmail.com])
+AC_INIT([NextEPC], [0.3.10], [acetcom@gmail.com])
 
 AC_SUBST(LIBVERSION)
 LIBVERSION=1:0:0
@@ -429,7 +429,7 @@ AC_CONFIG_FILES([lib/fd/Makefile])
 AC_CONFIG_FILES([lib/gtp/Makefile])
 AC_CONFIG_FILES([lib/ipfw/Makefile])
 AC_CONFIG_FILES([lib/Makefile])
-AC_CONFIG_FILES([src/app/Makefile])
+AC_CONFIG_FILES([src/common/Makefile])
 AC_CONFIG_FILES([src/mme/Makefile])
 AC_CONFIG_FILES([src/hss/Makefile])
 AC_CONFIG_FILES([src/sgw/Makefile])

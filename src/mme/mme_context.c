@@ -9,7 +9,7 @@
 
 #include <mongoc.h>
 #include <yaml.h>
-#include "app/yaml_helper.h"
+#include "common/yaml_helper.h"
 
 #include "s1ap/s1ap_message.h"
 #include "gtp/gtp_xact.h"
@@ -17,7 +17,7 @@
 #include "gtp/gtp_path.h"
 #include "fd/fd_lib.h"
 
-#include "app/context.h"
+#include "common/context.h"
 #include "nas_conv.h"
 #include "mme_context.h"
 #include "mme_event.h"
@@ -1994,19 +1994,7 @@ status_t mme_ue_remove(mme_ue_t *mme_ue)
     CLEAR_PAGING_INFO(mme_ue);
 
     /* Free UeRadioCapability */
-#if 0
-    if (mme_ue->radio_capa)
-    {
-        S1AP_UERadioCapability_t *radio_capa = 
-            (S1AP_UERadioCapability_t *)mme_ue->radio_capa;
-
-        if (radio_capa->buf)
-            CORE_FREE(radio_capa->buf);
-        CORE_FREE(mme_ue->radio_capa);
-    }
-#else
     S1AP_CLEAR_DATA(&mme_ue->ueRadioCapability);
-#endif
 
     /* Clear Transparent Container */
     S1AP_CLEAR_DATA(&mme_ue->container);

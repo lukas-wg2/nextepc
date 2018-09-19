@@ -21,6 +21,7 @@ libmme_la_SOURCES = \
 	esm_sm.c esm_handler.c esm_build.c \
 	mme_gtp_path.c mme_s11_build.c mme_s11_handler.c \
 	mme_sm.c mme_path.c \
+	sbc_message.h sbc_handler.h sbc_handler.c \
 	$(NULL)
 
 if USRSCTP
@@ -34,7 +35,7 @@ libmme_la_DEPENDENCIES = \
     $(top_srcdir)/lib/nas/libnas.la \
 	$(top_srcdir)/lib/fd/libfd.la \
     $(top_srcdir)/lib/gtp/libgtp.la \
-    $(top_srcdir)/src/app/libapp.la \
+    $(top_srcdir)/src/common/libcommon.la \
 	$(NULL)
 
 libmme_la_LIBADD = \
@@ -42,7 +43,7 @@ libmme_la_LIBADD = \
     $(top_srcdir)/lib/nas/libnas.la \
     $(top_srcdir)/lib/fd/libfd.la \
     $(top_srcdir)/lib/gtp/libgtp.la \
-    $(top_srcdir)/src/app/libapp.la \
+    $(top_srcdir)/src/common/libcommon.la \
 	$(NULL)
 
 AM_CPPFLAGS = \

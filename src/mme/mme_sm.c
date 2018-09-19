@@ -95,23 +95,14 @@ void mme_state_operational(fsm_t *s, event_t *e)
             enb = mme_enb_find_by_addr(addr);
             if (!enb)
             {
-                mme_enb_t *enb = NULL;
-                c_uint16_t outbound_streams = 0;
-
 #if USE_USRSCTP != 1
                 status_t rv;
 
                 rv = sock_register(sock, s1ap_recv_handler, NULL);
                 d_assert(rv == CORE_OK, break, "register s1ap_recv_cb failed");
 #endif
-
                 enb = mme_enb_add(sock, addr);
                 d_assert(enb, break, "Null param");
-
-                outbound_streams = (c_uint16_t)event_get_param3(e);
-                if (outbound_streams)
-                    enb->outbound_streams =
-                        c_min(outbound_streams, enb->outbound_streams);
             }
             else
             {
@@ -120,6 +111,45 @@ void mme_state_operational(fsm_t *s, event_t *e)
                 sock_delete(sock);
                 d_warn("S1 Socket Closed");
             }
+
+            break;
+        }
+        case MME_EVT_S1AP_LO_SCTP_COMM_UP:
+        {
+            mme_enb_t *enb = NULL;
+            sock_id sock = 0;
+            c_sockaddr_t *addr = NULL;
+            c_uint16_t outbound_streams = 0;
+
+            sock = (sock_id)event_get_param1(e);
+            d_assert(sock, break, "Null param");
+            addr = (c_sockaddr_t *)event_get_param2(e);
+            d_assert(addr, break, "Null param");
+
+            outbound_streams = (c_uint16_t)event_get_param4(e);
+
+            enb = mme_enb_find_by_addr(addr);
+            if (!enb)
+            {
+#if USE_USRSCTP != 1
+                status_t rv;
+
+                rv = sock_register(sock, s1ap_recv_handler, NULL);
+                d_assert(rv == CORE_OK, break, "register s1ap_recv_cb failed");
+#endif
+                enb = mme_enb_add(sock, addr);
+                d_assert(enb, break, "Null param");
+            }
+            else
+            {
+                CORE_FREE(addr);
+            }
+
+            enb->outbound_streams =
+                    c_min(outbound_streams, enb->outbound_streams);
+
+            d_trace(3, "eNB-S1 SCTP_COMM_UP[%s] Outbound Streams[%d]\n", 
+                CORE_ADDR(addr, buf), enb->outbound_streams);
 
             break;
         }
@@ -139,8 +169,7 @@ void mme_state_operational(fsm_t *s, event_t *e)
 
             if (enb)
             {
-                d_trace(1, "eNB-S1[%x] connection refused!!!\n", 
-                        enb->enb_id);
+                d_trace(1, "eNB-S1[%x] connection refused!!!\n", enb->enb_id);
                 mme_enb_remove(enb);
             }
             else
@@ -157,7 +186,6 @@ void mme_state_operational(fsm_t *s, event_t *e)
             sock_id sock = 0;
             c_sockaddr_t *addr = NULL;
             pkbuf_t *pkbuf = NULL;
-            c_uint16_t outbound_streams = 0;
 
             sock = (sock_id)event_get_param1(e);
             d_assert(sock, break, "Null param");
@@ -168,17 +196,12 @@ void mme_state_operational(fsm_t *s, event_t *e)
             pkbuf = (pkbuf_t *)event_get_param3(e);
             d_assert(pkbuf, break, "Null param");
 
-            outbound_streams = (c_uint16_t)event_get_param4(e);
             enb = mme_enb_find_by_addr(addr);
             CORE_FREE(addr);
 
             d_assert(enb, pkbuf_free(pkbuf); break, "No eNB context");
             d_assert(FSM_STATE(&enb->sm), pkbuf_free(pkbuf); break,
                     "No S1AP State Machine");
-
-            if (outbound_streams)
-                enb->outbound_streams =
-                    c_min(outbound_streams, enb->outbound_streams);
 
             rv = s1ap_decode_pdu(&message, pkbuf);
             if (rv != CORE_OK)

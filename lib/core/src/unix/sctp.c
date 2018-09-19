@@ -202,7 +202,7 @@ int core_sctp_sendmsg(sock_id id, const void *msg, size_t len,
 }
 
 int core_sctp_recvmsg(sock_id id, void *msg, size_t len,
-        c_sockaddr_t *from, sctp_info_t *sinfo)
+        c_sockaddr_t *from, sctp_info_t *sinfo, int *msg_flags)
 {
     sock_t *sock = (sock_t *)id;
     int size;
@@ -213,73 +213,49 @@ int core_sctp_recvmsg(sock_id id, void *msg, size_t len,
 
     d_assert(id, return -1,);
 
+    size = sctp_recvmsg(sock->fd, msg, len,
+                from ? &from->sa : NULL,  from ? &addrlen : NULL,
+                &sndrcvinfo, &flags);
+    if (size < 0)
+    {
+        d_error("sctp_recvmsg(%d) failed(%d:%s)",
+                size, errno, strerror(errno));
+        return size;
+    }
+
+    if (msg_flags)
+    {
+        *msg_flags = flags;
+    }
+
+    if (sinfo)
+    {
+        sinfo->ppid = ntohl(sndrcvinfo.sinfo_ppid);
+        sinfo->stream_no = sndrcvinfo.sinfo_stream;
+    }
+
+    return size;
+}
+
+int core_sctp_recvdata(sock_id id, void *msg, size_t len,
+        c_sockaddr_t *from, sctp_info_t *sinfo)
+{
+    int size;
+    int flags = 0;
+
     do
     {
-        size = sctp_recvmsg(sock->fd, msg, len,
-                    from ? &from->sa : NULL,  from ? &addrlen : NULL,
-                    &sndrcvinfo, &flags);
+        size = core_sctp_recvmsg(id, msg, len, from, sinfo, &flags);
         if (size < 0)
         {
-            if (errno != EAGAIN)
-            {
-                d_error("sctp_recvmsg(%d) failed(%d:%s)",
-                        size, errno, strerror(errno));
-            }
-
+            d_error("core_sctp_recvdata(%d) failed(%d:%s)",
+                    size, errno, strerror(errno));
             return size;
         }
 
         if (flags & MSG_NOTIFICATION)
         {
-            union sctp_notification *not = (union sctp_notification *)msg;
-
-            switch(not->sn_header.sn_type) 
-            {
-                case SCTP_ASSOC_CHANGE :
-                    d_trace(3, "SCTP_ASSOC_CHANGE"
-                            "(type:0x%x, flags:0x%x, state:0x%x)\n", 
-                            not->sn_assoc_change.sac_type,
-                            not->sn_assoc_change.sac_flags,
-                            not->sn_assoc_change.sac_state);
-
-                    if (not->sn_assoc_change.sac_state == 
-                            SCTP_SHUTDOWN_COMP ||
-                        not->sn_assoc_change.sac_state == 
-                            SCTP_COMM_LOST)
-                    {
-                        return CORE_SCTP_REMOTE_CLOSED;
-                    }
-
-                    if (not->sn_assoc_change.sac_state == SCTP_COMM_UP)
-                    {
-                        d_trace(3, "SCTP_COMM_UP : inboud:%d, outbound = %d\n",
-                                not->sn_assoc_change.sac_inbound_streams,
-                                not->sn_assoc_change.sac_outbound_streams);
-                    }
-                    if (sinfo)
-                    {
-                        sinfo->inbound_streams = 
-                            not->sn_assoc_change.sac_inbound_streams;
-                        sinfo->outbound_streams = 
-                            not->sn_assoc_change.sac_outbound_streams;
-                    }
-                    break;
-                case SCTP_SEND_FAILED :
-                    d_error("SCTP_SEND_FAILED"
-                            "(type:0x%x, flags:0x%x, error:0x%x)\n", 
-                            not->sn_send_failed.ssf_type,
-                            not->sn_send_failed.ssf_flags,
-                            not->sn_send_failed.ssf_error);
-                    break;
-                case SCTP_SHUTDOWN_EVENT :
-                    d_trace(3, "SCTP_SHUTDOWN_EVENT\n");
-                    return CORE_SCTP_REMOTE_CLOSED;
-                default :
-                    d_error("Discarding event with unknown "
-                            "flags = 0x%x, type 0x%x", 
-                            flags, not->sn_header.sn_type);
-                    break;
-            }
+            /* Nothing */
         }
         else if (flags & MSG_EOR)
         {
@@ -287,16 +263,10 @@ int core_sctp_recvmsg(sock_id id, void *msg, size_t len,
         }
         else
         {
-            return CORE_SCTP_EAGAIN;
+            d_assert(0, return -1,);
         }
-        
-    } while(1);
 
-    if (sinfo)
-    {
-        sinfo->ppid = ntohl(sndrcvinfo.sinfo_ppid);
-        sinfo->stream_no = sndrcvinfo.sinfo_stream;
-    }
+    } while(1);
 
     return size;
 }
