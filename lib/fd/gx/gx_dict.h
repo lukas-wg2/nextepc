@@ -106,6 +106,7 @@ extern struct dict_object *gx_codec_data;
 extern struct dict_object *gx_media_sub_component;
 extern struct dict_object *gx_flow_number;
 extern struct dict_object *gx_flow_usage;
+extern struct dict_object *gx_rating_group;
 
 int gx_dict_init(void);
 

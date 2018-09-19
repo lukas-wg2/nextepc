@@ -65,6 +65,7 @@ struct dict_object *gx_codec_data = NULL;
 struct dict_object *gx_media_sub_component = NULL;
 struct dict_object *gx_flow_number = NULL;
 struct dict_object *gx_flow_usage = NULL;
+struct dict_object *gx_rating_group = NULL;
 
 int gx_dict_init(void)
 {
@@ -133,6 +134,8 @@ int gx_dict_init(void)
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Media-Sub-Component", &gx_media_sub_component);
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Flow-Number", &gx_flow_number);
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Flow-Usage", &gx_flow_usage);
+
+    CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Rating-Group", &gx_rating_group);
 
     return 0;
 }
