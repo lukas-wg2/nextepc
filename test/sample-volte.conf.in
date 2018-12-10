@@ -1,7 +1,7 @@
 db_uri: mongodb://localhost/nextepc
 
 logger:
-    trace: 
+    trace:
         app: 1
         s1ap: 1
         nas: 1
@@ -36,7 +36,7 @@ mme:
 
     s1ap:
     gtpc:
-    gummei: 
+    gummei:
       plmn_id:
         mcc: 001
         mnc: 01
@@ -145,6 +145,8 @@ pcrf:
         - module: @abs_top_builddir@/lib/@FREEDIAMETER_DIR@/extensions/dict_dcca_3gpp/.libs/dict_dcca_3gpp.so
       connect:
         - identity: pgw.open-ims.test
-          addr: 127.0.0.3
+          addr: 127.0.0.1
+          port: 7868
         - identity: pcscf.open-ims.test
           addr: 127.0.0.1
+          port: 7868
