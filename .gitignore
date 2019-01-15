@@ -45,6 +45,7 @@ test/testsuite.log
 lib/core/test/testcore
 test/testvolte
 test/testepc
+test/testpcrf
 nextepc-mmed
 nextepc-pcrfd
 nextepc-pgwd
@@ -70,3 +71,8 @@ debian/nextepc-hss
 # webui
 webui/.next/
 webui/node_modules/
+
+# dont ignore special config, usable with small tweak
+!pcrf.conf
+!pcrf_peer.conf
+!test/pcrf-test.conf
