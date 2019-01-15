@@ -17,7 +17,7 @@ testvolte_SOURCES = \
 	common/abts.h common/abts.c \
 	common/testpacket.h common/testpacket.c common/testutil.h \
 	volte/testutil.c volte/testapp.h volte/testapp.c volte/pcscf_fd_path.c \
-		volte/volte_test.c \
+	volte/volte_test.c \
 	$(NULL)
 
 testpcrf_SOURCES = \
@@ -45,10 +45,9 @@ AM_CPPFLAGS = \
 	$(NULL)
 
 AM_CFLAGS = \
-	-g \
 	-Wall -Werror \
 	-Wno-unused-function -Wno-unused-variable -Wno-deprecated-declarations \
-	-O0 \
+	@OSCPPFLAGS@ \
 	$(NULL)
 
 DEFS = \
