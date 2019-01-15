@@ -7,8 +7,9 @@
 #include "core_debug.h"
 #include "core_pool.h"
 
-#define MAX_NUM_OF_CLBUF 256
-#define MAX_NUM_OF_PKBUF 256
+/* The default values for these was 256 */
+#define MAX_NUM_OF_CLBUF 131072
+#define MAX_NUM_OF_PKBUF 131072
 
 pool_declare(clbuf_pool, clbuf_t, MAX_NUM_OF_CLBUF);
 pool_declare(pkbuf_pool, pkbuf_t, MAX_NUM_OF_PKBUF);
@@ -23,12 +24,19 @@ pool_declare(pkbuf_pool, pkbuf_t, MAX_NUM_OF_PKBUF);
 #define SIZEOF_CLUSTER_2048     CORE_ALIGN(2048+MAX_SIZEOF_HEADROOM, BOUNDARY)
 #define SIZEOF_CLUSTER_8192     CORE_ALIGN(8192+MAX_SIZEOF_HEADROOM, BOUNDARY)
 
-#define MAX_NUM_OF_CLUSTER_128      256
-#define MAX_NUM_OF_CLUSTER_256      256 
-#define MAX_NUM_OF_CLUSTER_512      256
-#define MAX_NUM_OF_CLUSTER_1024     256
-#define MAX_NUM_OF_CLUSTER_2048     256
-#define MAX_NUM_OF_CLUSTER_8192     256
+/*
+    These all had the default value of 256, the numbers written next to them
+    is the multiplier of a base value (in this case 128 bytes) for size balance,
+    eg that the 128 byte clusters have the same total size as the 8192 clusters.
+    Usual size of packets are < 128 bytes, so 128 and 256 bytes may need priority
+    over larger sizes.
+*/
+#define MAX_NUM_OF_CLUSTER_128      131072
+#define MAX_NUM_OF_CLUSTER_256      65536
+#define MAX_NUM_OF_CLUSTER_512      4096
+#define MAX_NUM_OF_CLUSTER_1024     1024
+#define MAX_NUM_OF_CLUSTER_2048     512
+#define MAX_NUM_OF_CLUSTER_8192     128
 
 typedef c_uint8_t cluster_128_t[SIZEOF_CLUSTER_128];
 typedef c_uint8_t cluster_256_t[SIZEOF_CLUSTER_256];

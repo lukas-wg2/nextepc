@@ -10,7 +10,10 @@ extern "C" {
 
 CORE_DECLARE(status_t) test_app_initialize(
         const char *config_path, const char *log_path, const char *pid_path);
+CORE_DECLARE(status_t) pcrf_app_initialize(
+        const char *config_path, const char *log_path, const char *pid_path);
 CORE_DECLARE(void) test_app_terminate(void);
+CORE_DECLARE(void) pcrf_app_terminate(void);
 
 #ifdef __cplusplus
 }

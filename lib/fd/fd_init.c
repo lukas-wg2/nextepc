@@ -33,8 +33,9 @@ int fd_init(int mode, const char *conffile, fd_config_t *fd_config)
     ret = fd_log_handler_register(fd_log_func);
     if (ret != 0) 
     {
-        d_error("fd_log_handler_register() failed");
-        return ret;
+	/* TODO: make the loghandler work again */
+        //d_error("fd_log_handler_register() failed");
+        //return ret;
     } 
 
     ret = fd_core_initialize();

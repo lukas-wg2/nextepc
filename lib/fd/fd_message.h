@@ -18,8 +18,8 @@ extern "C" {
 #define FD_DIAMETER_AVP_UNSUPPORTED                     5001
 #define FD_DIAMETER_UNKNOWN_SESSION_ID                  5002
 #define FD_DIAMETER_AUTHORIZATION_REJECTED              5003
-#define FD_DIAMETER_MISSING_AVP                         5004
-#define FD_DIAMETER_INVALID_AVP_VALUE                   5005
+#define FD_DIAMETER_MISSING_AVP                         5005
+#define FD_DIAMETER_INVALID_AVP_VALUE                   5004
 
 extern struct dict_object *fd_session_id;
 extern struct dict_object *fd_origin_host;
@@ -27,8 +27,8 @@ extern struct dict_object *fd_origin_realm;
 extern struct dict_object *fd_destination_host;
 extern struct dict_object *fd_destination_realm;
 extern struct dict_object *fd_user_name;
-#define FD_AUTH_SESSION_STATE_MAINTAINED                0
-#define FD_AUTH_SESSION_NO_STATE_MAINTAINED             1
+#define FD_AUTH_SESSION_STATE_MAINTAINED                1
+#define FD_AUTH_SESSION_NO_STATE_MAINTAINED             0
 extern struct dict_object *fd_auth_session_state;
 extern struct dict_object *fd_auth_application_id;
 #define FD_AUTH_REQUEST_TYPE_AUTHENTICATE_ONLY          1

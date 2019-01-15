@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in.
 
-bin_PROGRAMS = testepc testvolte
+bin_PROGRAMS = testepc testvolte testpcrf
 
 configdir = ${sysconfdir}/nextepc/test
 config_DATA = sample.conf sample-volte.conf
@@ -17,7 +17,13 @@ testvolte_SOURCES = \
 	common/abts.h common/abts.c \
 	common/testpacket.h common/testpacket.c common/testutil.h \
 	volte/testutil.c volte/testapp.h volte/testapp.c volte/pcscf_fd_path.c \
-	volte/volte_test.c \
+		volte/volte_test.c \
+	$(NULL)
+
+testpcrf_SOURCES = \
+	common/abts.h common/abts.c common/testutil.h volte/pcrfutil.c \
+	volte/testapp.h volte/pcrfapp.c volte/pcscf_fd_path_pcrf_load_test.c \
+	volte/pcrf_test.c \
 	$(NULL)
 
 LDADD = \
@@ -39,9 +45,10 @@ AM_CPPFLAGS = \
 	$(NULL)
 
 AM_CFLAGS = \
+	-g \
 	-Wall -Werror \
 	-Wno-unused-function -Wno-unused-variable -Wno-deprecated-declarations \
-	@OSCPPFLAGS@ \
+	-O0 \
 	$(NULL)
 
 DEFS = \

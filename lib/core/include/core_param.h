@@ -4,7 +4,11 @@
 #define MAX_NUM_OF_THREAD       128
 #define MAX_NUM_OF_THREADATTR  MAX_NUM_OF_THREAD
 #define MAX_NUM_OF_PROC         128
-#define MAX_NUM_OF_MUTEX        512
+/* 
+    Mutex lock for memory pool access, maybe was 
+    512 because pkbuf and clbuf was 256+256.
+*/
+#define MAX_NUM_OF_MUTEX        16384
 #define MAX_NUM_OF_COND         512
 #define MAX_NUM_OF_RWLOCK       512
 #define MAX_NUM_OF_SEMAPHORE    512
