@@ -73,6 +73,4 @@ webui/.next/
 webui/node_modules/
 
 # dont ignore special config, usable with small tweak
-!pcrf.conf
-!pcrf_peer.conf
 !test/pcrf-test.conf
