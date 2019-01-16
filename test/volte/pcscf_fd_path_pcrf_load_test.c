@@ -65,7 +65,7 @@ static int pcscf_rx_fb_cb(struct msg **msg, struct avp *avp,
 }
 
 void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
-                       int qos_type, int flow_presence, int sess_id_opt)
+                                 int qos_type, int flow_presence, int sess_id_opt)
 {
     status_t rv;
     int ret;
@@ -115,11 +115,50 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     else
     {
         /* Create a new session */
+        /*
         char RX_APP_SID_OPT[64];
         sprintf(RX_APP_SID_OPT, "rx_app_%d", sess_id_opt);
         printf(RX_APP_SID_OPT);
         ret = fd_msg_new_session(req, (os0_t)RX_APP_SID_OPT,
                                  strlen(RX_APP_SID_OPT));
+
+        */
+        {
+            union avp_value val;
+            struct avp *avp = NULL;
+            struct session *sess = NULL;
+            os0_t sid;
+            size_t sidlen;
+
+            TRACE_ENTRY("%p %p %zd", req, opt, optlen);
+            CHECK_PARAMS(req);
+
+            /* Check there is not already a session in the message */
+            CHECK_FCT(fd_msg_sess_get(fd_g_config->cnf_dict, req, &sess, NULL));
+            CHECK_PARAMS(sess == NULL);
+
+            /* Ok, now create the session */
+            CHECK_FCT(fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen));
+            CHECK_FCT(fd_sess_getsid(sess, &sid, &sidlen));
+
+            /* Create an AVP to hold it */
+            CHECK_FCT(fd_msg_avp_new(dict_avp_SI, 0, &avp));
+
+            /* Set its value */
+            memset(&val, 0, sizeof(val));
+            val.os.data = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
+            val.os.len = strlen("pcrf.open-ims.test;1547586413;1;CCR_SESSION");
+            CHECK_FCT(fd_msg_avp_setvalue(avp, &val));
+
+            /* Add it to the message */
+            CHECK_FCT(fd_msg_avp_add(req, MSG_BRW_FIRST_CHILD, avp));
+
+            /* Save the session associated with the message */
+            CHECK_FCT(fd_msg_sess_set(req, sess));
+
+            /* Done! */
+        }
+
         d_assert(ret == 0, return, );
         ret = fd_msg_sess_get(fd_g_config->cnf_dict, req, &session, NULL);
         d_assert(ret == 0, return, );

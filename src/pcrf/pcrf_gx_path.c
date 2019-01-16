@@ -13,6 +13,7 @@
 
 #include "pcrf_context.h"
 #include "pcrf_fd_path.h"
+#include "pcrf_persistance.c"
 
 struct rx_sess_state {
     lnode_t     node;
@@ -54,6 +55,7 @@ pool_declare(pcrf_gx_rx_sess_pool,
         struct rx_sess_state, MAX_POOL_OF_DIAMETER_SESS);
 
 static void pcrf_gx_raa_cb(void *data, struct msg **msg);
+static void get_gx_state(struct sess_state *sess_data);
 
 static status_t encode_pcc_rule_definition(
         struct avp *avp, pcc_rule_t *pcc_rule, int flow_presence);
@@ -200,6 +202,10 @@ static int pcrf_gx_fb_cb(struct msg **msg, struct avp *avp,
 static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp, 
         struct session *sess, void *opaque, enum disp_action *act)
 {
+
+    printf("print\n");
+    d_trace(3, "trace\n");
+
     status_t rv;
     int ret = 0, i;
 
@@ -601,6 +607,23 @@ static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp,
     if (sess_data->cc_request_type != GX_CC_REQUEST_TYPE_TERMINATION_REQUEST)
     {
         /* Store this value in the session */
+        printf("\n\n------------save---------------\n");
+        printf("sid: %s\n", sess_data->sid);
+        printf("cc_request_type: %u\n", sess_data->cc_request_type);
+        printf("peer_host: %s\n", sess_data->peer_host);
+        printf("imsi_bcd: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("apn: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("ipv4: %u\n", sess_data->ipv4);
+        printf("ipv6: %u\n", sess_data->ipv6);
+        printf("reserved: %u\n", sess_data->reserved);
+        printf("addr4: %u\n", sess_data->addr);
+        printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n", 
+            sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3], 
+            sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7], 
+            sess_data->addr6[8], sess_data->addr6[9], sess_data->addr6[10], sess_data->addr6[11], 
+            sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15]);
+        printf("timespec: %ld %ld\n", sess_data->ts.tv_sec, sess_data->ts.tv_nsec);
+        printf("-------------------------------\n");
         ret = fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
         d_assert(ret == 0,,);
         d_assert(sess_data == NULL,,);
@@ -654,10 +677,10 @@ out:
     if (sess_data->cc_request_type != GX_CC_REQUEST_TYPE_TERMINATION_REQUEST)
     {
         /* Store this value in the session */
-        printf("\n\n-------------------------------\n");
-        printf("sid: %o\n", sess_data->sid);
+        printf("\n\n------------save---------------\n");
+        printf("sid: %s\n", sess_data->sid);
         printf("cc_request_type: %u\n", sess_data->cc_request_type);
-        printf("peer_host: %o\n", sess_data->peer_host);
+        printf("peer_host: %s\n", sess_data->peer_host);
         printf("imsi_bcd: %s\n", core_strdup((char *)hdr->avp_value->os.data));
         printf("apn: %s\n", core_strdup((char *)hdr->avp_value->os.data));
         printf("ipv4: %u\n", sess_data->ipv4);
@@ -668,14 +691,31 @@ out:
             sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3], 
             sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7], 
             sess_data->addr6[8], sess_data->addr6[9], sess_data->addr6[10], sess_data->addr6[11], 
-            sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15], );
-        printf("timespec: %ld %ld\n", sess_data->ts->tv_sec, sess_data->ts->tv_nsec);
+            sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15]);
+        printf("timespec: %ld %ld\n", sess_data->ts.tv_sec, sess_data->ts.tv_nsec);
         printf("-------------------------------\n");
         ret = fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
         d_assert(sess_data == NULL,,);
     }
     else
     {
+        printf("\n\n------------term---------------\n");
+        printf("sid: %s\n", sess_data->sid);
+        printf("cc_request_type: %u\n", sess_data->cc_request_type);
+        printf("peer_host: %s\n", sess_data->peer_host);
+        printf("imsi_bcd: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("apn: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("ipv4: %u\n", sess_data->ipv4);
+        printf("ipv6: %u\n", sess_data->ipv6);
+        printf("reserved: %u\n", sess_data->reserved);
+        printf("addr4: %u\n", sess_data->addr);
+        printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n", 
+            sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3], 
+            sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7], 
+            sess_data->addr6[8], sess_data->addr6[9], sess_data->addr6[10], sess_data->addr6[11], 
+            sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15]);
+        printf("timespec: %ld %ld\n", sess_data->ts.tv_sec, sess_data->ts.tv_nsec);
+        printf("-------------------------------\n");
         state_cleanup(sess_data, NULL, NULL);
     }
 
@@ -1235,9 +1275,28 @@ status_t pcrf_gx_init(void)
 	ret = fd_disp_app_support(gx_application, fd_vendor, 1, 0);
     d_assert(ret == 0, return CORE_ERROR,);
 
-    //struct sess_state sess_data;
-    //get_gx_state(*sess_data);
-    //ret = fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
+    struct sess_state sess_data;
+    get_gx_state(&sess_data);
+
+    printf("\n\n------------init---------------\n");
+        printf("sid: %s\n", sess_data->sid);
+        printf("cc_request_type: %u\n", sess_data->cc_request_type);
+        printf("peer_host: %s\n", sess_data->peer_host);
+        printf("imsi_bcd: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("apn: %s\n", core_strdup((char *)hdr->avp_value->os.data));
+        printf("ipv4: %u\n", sess_data->ipv4);
+        printf("ipv6: %u\n", sess_data->ipv6);
+        printf("reserved: %u\n", sess_data->reserved);
+        printf("addr4: %u\n", sess_data->addr);
+        printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n", 
+            sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3], 
+            sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7], 
+            sess_data->addr6[8], sess_data->addr6[9], sess_data->addr6[10], sess_data->addr6[11], 
+            sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15]);
+        printf("timespec: %ld %ld\n", sess_data->ts.tv_sec, sess_data->ts.tv_nsec);
+        printf("-------------------------------\n");
+
+    fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
 
 	return CORE_OK;
 }
