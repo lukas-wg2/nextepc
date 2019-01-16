@@ -2,8 +2,6 @@
 #include "core_list.h"
 #include "time.h"
 
-#include "pcrf_gx_path.c"
-
 static void get_gx_state(struct sess_state *sess_data)
 {
     d_assert(sess_data, return,);
