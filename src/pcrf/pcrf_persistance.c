@@ -12,6 +12,17 @@
 #include "pcrf_context.h"
 #include "pcrf_fd_path.h"
 
+struct rx_sess_state {
+    lnode_t     node;
+
+    os0_t       sid;                            /* Rx Session-Id */
+
+    pcc_rule_t  pcc_rule[MAX_NUM_OF_PCC_RULE];
+    int         num_of_pcc_rule;
+
+    struct sess_state *gx;
+};
+
 struct sess_state {
     os0_t       sid;                /* Gx Session-Id */
 
