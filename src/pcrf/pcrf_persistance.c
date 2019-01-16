@@ -1,16 +1,6 @@
 #include "core_lib.h"
-#include "core_debug.h"
-#include "core_pool.h"
-#include "core_pkbuf.h"
-
-#include "fd/fd_lib.h"
-#include "fd/gx/gx_dict.h"
-#include "fd/rx/rx_dict.h"
-#include "fd/gx/gx_message.h"
-#include "fd/rx/rx_message.h"
-
-#include "pcrf_context.h"
-#include "pcrf_fd_path.h"
+#include "core_list.h"
+#include "time.h"
 
 struct rx_sess_state {
     lnode_t     node;
