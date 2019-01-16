@@ -2,36 +2,7 @@
 #include "core_list.h"
 #include "time.h"
 
-struct rx_sess_state {
-    lnode_t     node;
-
-    os0_t       sid;                            /* Rx Session-Id */
-
-    pcc_rule_t  pcc_rule[MAX_NUM_OF_PCC_RULE];
-    int         num_of_pcc_rule;
-
-    struct sess_state *gx;
-};
-
-struct sess_state {
-    os0_t       sid;                /* Gx Session-Id */
-
-    c_uint32_t  cc_request_type;    /* CC-Request-Type */
-    os0_t       peer_host;          /* Peer Host */
-
-    c_int8_t    *imsi_bcd;
-    c_int8_t    *apn;
-
-ED3(c_uint8_t   ipv4:1;,
-    c_uint8_t   ipv6:1;,
-    c_uint8_t   reserved:6;)
-    c_uint32_t  addr;               /* Framed-IPv4-Address */
-    c_uint8_t   addr6[IPV6_LEN];    /* Framed-IPv6-Prefix */
-
-    list_t      rx_list;
-
-    struct timespec ts;             /* Time of sending the message */
-};
+#include "pcrf_gx_path.c"
 
 static void get_gx_state(struct sess_state *sess_data)
 {
