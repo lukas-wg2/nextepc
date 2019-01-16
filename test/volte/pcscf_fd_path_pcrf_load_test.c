@@ -11,7 +11,7 @@
 #include "fd/fd_lib.h"
 #include "fd/rx/rx_dict.h"
 #include "fd/rx/rx_message.h"
-#include "libfdproto.h"
+#include "freeDiameter/libfdproto.h"
 
 #include "pcscf_fd_path_pcrf_load_test.h"
 
