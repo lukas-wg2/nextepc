@@ -12,6 +12,7 @@
 #include "fd/rx/rx_message.h"
 
 #include <freeDiameter/libfdproto.h>
+#include "sessions.c"
 
 #include "pcrf_context.h"
 #include "pcrf_fd_path.h"
@@ -1300,7 +1301,7 @@ status_t pcrf_gx_init(void)
 
     struct session *sess;
     fd_sess_restore(&sess, sess_data->sid, strlen((char *) sess_data->sid));
-    fd_sess_state_store(pcrf_gx_reg, &sess, &sess_data);
+    fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
 
     return CORE_OK;
 }
