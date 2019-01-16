@@ -1299,9 +1299,9 @@ status_t pcrf_gx_init(void)
     printf("timespec: %ld %ld\n", sess_data.ts.tv_sec, sess_data.ts.tv_nsec);
     printf("-------------------------------\n");
 
-    struct session sess;
+    struct session *sess;
     int new;
-    fd_sess_fromsid(&sess_data.sid, strlen((char *) sess_data.sid), &&sess, &new);
+    fd_sess_fromsid(&sess_data.sid, strlen((char *) sess_data.sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, &sess, &sess_ptr);
 
     return CORE_OK;
