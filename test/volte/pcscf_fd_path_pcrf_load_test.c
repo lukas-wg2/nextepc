@@ -127,11 +127,14 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
             union avp_value val;
             struct avp *avp = NULL;
             struct session *sess = NULL;
-            os0_t sid;
-            size_t sidlen;
+            os0_t sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
+            size_t sidlen = strlen("pcrf.open-ims.test;1547586413;1;CCR_SESSION");
+            int new;
 
             /* Create the session */
-            fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen);
+            //fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen);
+            
+            fd_sess_fromsid(&sid, sidlen, &sess, &new);
             fd_sess_getsid(sess, &sid, &sidlen);
 
             /* Create an AVP to hold it */
