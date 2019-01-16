@@ -11,10 +11,13 @@
 #include "fd/fd_lib.h"
 #include "fd/rx/rx_dict.h"
 #include "fd/rx/rx_message.h"
+#include "libfdproto.h"
 
 #include "pcscf_fd_path_pcrf_load_test.h"
 
 #define MAX_NUM_SESSION_STATE 32
+
+static struct dict_object * dict_avp_SI  = NULL; /* Session-Id */
 
 static struct session_handler *pcscf_rx_reg = NULL;
 static struct disp_hdl *hdl_rx_fb = NULL;
@@ -134,7 +137,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
             /* Create the session */
             //fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen);
             
-            fd_sess_fromsid(&sid, sidlen, &sess, &new);
+            fd_sess_fromsid(sid, sidlen, &sess, &new);
             fd_sess_getsid(sess, &sid, &sidlen);
 
             /* Create an AVP to hold it */
@@ -501,6 +504,7 @@ status_t pcscf_fd_init_load_test(void)
     struct disp_when data;
 
     pool_init(&pcscf_rx_sess_pool, MAX_NUM_SESSION_STATE);
+    fd_dict_search( fd_g_config->cnf_dict, DICT_AVP, AVP_BY_NAME, "Session-Id", &dict_avp_SI , ENOENT);
 
     pcscf_fd_config();
 
