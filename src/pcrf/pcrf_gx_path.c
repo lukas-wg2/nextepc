@@ -1301,7 +1301,7 @@ status_t pcrf_gx_init(void)
 
     struct session *sess;
     int new;
-    fd_sess_fromsid(&sess_data.sid, strlen((char *) sess_data.sid), sess, &new);
+    fd_sess_fromsid(sess_data.sid, strlen((char *) sess_data.sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, sess, &sess_ptr);
 
     return CORE_OK;
