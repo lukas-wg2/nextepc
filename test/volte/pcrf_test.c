@@ -442,6 +442,7 @@ static void pcrf_test(abts_case *tc, void *data)
     core_sleep(time_from_msec(2000));
     send_ccr_msg();
 
+
     /* Send AA-Request */
     int i, j = SENT_AAR;
     printf("sending %d AAR \n", j);
