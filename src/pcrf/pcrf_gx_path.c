@@ -11,7 +11,7 @@
 #include "fd/gx/gx_message.h"
 #include "fd/rx/rx_message.h"
 
-#include "fdproto-internal.h"
+#include <freeDiameter/libfdproto.h>
 
 #include "pcrf_context.h"
 #include "pcrf_fd_path.h"
