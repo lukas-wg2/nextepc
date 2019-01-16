@@ -1854,7 +1854,6 @@ int fd_sess_restore(struct session **session, uint8_t *sid, size_t sidlen)
     uint32_t hash;
     struct session *sess;
     struct fd_list *li;
-    int found = 0;
     int ret = 0;
 
     TRACE_ENTRY("%p %p %zd %p %zd", session, diamid, diamidlen, opt, optlen);
