@@ -1824,7 +1824,6 @@ static status_t update_qos(
 
 static void get_gx_state(struct sess_state *sess_data)
 {
-    d_assert(sess_data, return, );
 
     sess_data->sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
     //sid
