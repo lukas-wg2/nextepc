@@ -60,6 +60,7 @@ pool_declare(pcrf_gx_rx_sess_pool,
 
 static void pcrf_gx_raa_cb(void *data, struct msg **msg);
 static void get_gx_state(struct sess_state *sess_data);
+int fd_sess_restore(struct session **session, os0_t *sid, size_t sidlen);
 
 static status_t encode_pcc_rule_definition(
     struct avp *avp, pcc_rule_t *pcc_rule, int flow_presence);
@@ -1298,7 +1299,7 @@ status_t pcrf_gx_init(void)
     printf("-------------------------------\n");
 
     struct session *sess;
-    fd_sess_restore(sess, sess_data->sid, strlen(sess_data->sid));
+    fd_sess_restore(&sess, sess_data->sid, strlen((char *) sess_data->sid));
     fd_sess_state_store(pcrf_gx_reg, &sess, &sess_data);
 
     return CORE_OK;
