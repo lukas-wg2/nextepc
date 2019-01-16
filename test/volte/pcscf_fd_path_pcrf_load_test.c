@@ -130,31 +130,24 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
             os0_t sid;
             size_t sidlen;
 
-            TRACE_ENTRY("%p %p %zd", req, opt, optlen);
-            CHECK_PARAMS(req);
-
-            /* Check there is not already a session in the message */
-            CHECK_FCT(fd_msg_sess_get(fd_g_config->cnf_dict, req, &sess, NULL));
-            CHECK_PARAMS(sess == NULL);
-
-            /* Ok, now create the session */
-            CHECK_FCT(fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen));
-            CHECK_FCT(fd_sess_getsid(sess, &sid, &sidlen));
+            /* Create the session */
+            fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen);
+            fd_sess_getsid(sess, &sid, &sidlen);
 
             /* Create an AVP to hold it */
-            CHECK_FCT(fd_msg_avp_new(dict_avp_SI, 0, &avp));
+            fd_msg_avp_new(dict_avp_SI, 0, &avp);
 
             /* Set its value */
             memset(&val, 0, sizeof(val));
             val.os.data = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
             val.os.len = strlen("pcrf.open-ims.test;1547586413;1;CCR_SESSION");
-            CHECK_FCT(fd_msg_avp_setvalue(avp, &val));
+            fd_msg_avp_setvalue(avp, &val);
 
             /* Add it to the message */
-            CHECK_FCT(fd_msg_avp_add(req, MSG_BRW_FIRST_CHILD, avp));
+            fd_msg_avp_add(req, MSG_BRW_FIRST_CHILD, avp);
 
             /* Save the session associated with the message */
-            CHECK_FCT(fd_msg_sess_set(req, sess));
+            fd_msg_sess_set(req, sess);
 
             /* Done! */
         }
