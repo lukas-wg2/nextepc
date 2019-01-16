@@ -30,7 +30,7 @@
 
 #define AUTH_APP_ID 16777238
 #define VENDOR_ID_3GPP 10415
-#define SENT_AAR 10000
+#define SENT_AAR 1
 
 struct dict_object *ccr_cmd = NULL;
 struct dict_object *cca_cmd = NULL;
@@ -200,7 +200,7 @@ static int app_gx_entry()
     return 0;
 }
 
-int snd_ccr_msg()
+int send_ccr_msg()
 {
     struct dict_object *cmd_r = NULL;
     application_id_t ccr_id = 272;
@@ -440,7 +440,7 @@ static void pcrf_test(abts_case *tc, void *data)
     printf("test sending CCR \n");
     app_gx_entry();
     core_sleep(time_from_msec(2000));
-    snd_ccr_msg();
+    send_ccr_msg();
 
     /* Send AA-Request */
     int i, j = SENT_AAR;
