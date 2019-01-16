@@ -12,7 +12,6 @@
 #include "fd/rx/rx_message.h"
 
 #include <freeDiameter/libfdproto.h>
-#include "sessions.c"
 
 #include "pcrf_context.h"
 #include "pcrf_fd_path.h"
@@ -1300,7 +1299,8 @@ status_t pcrf_gx_init(void)
     printf("-------------------------------\n");
 
     struct session *sess;
-    fd_sess_restore(&sess, sess_data->sid, strlen((char *) sess_data->sid));
+    int new;
+    fd_sess_fromsid(sess_data->sid, strlen((char *) sess_data->sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, sess, &sess_data);
 
     return CORE_OK;
@@ -1848,70 +1848,4 @@ static void get_gx_state(struct sess_state *sess_data)
 
     sess_data->ts.tv_sec = (__kernel_time_t)0;
     sess_data->ts.tv_nsec = (long)0;
-}
-
-int fd_sess_restore(struct session **session, uint8_t *sid, size_t sidlen)
-{
-    uint32_t hash;
-    struct session *sess;
-    struct fd_list *li;
-    int ret = 0;
-
-    TRACE_ENTRY("%p %p %zd %p %zd", session, diamid, diamidlen, opt, optlen);
-
-    CHECK_PARAMS(fd_os_is_valid_os0(sid, sidlen));
-    /* opt is the full string */
-    CHECK_MALLOC(sid = os0dup(sid, sidlen));
-
-    hash = fd_os_hash(sid, sidlen);
-
-    /* Now find the place to add this object in the hash table. */
-    CHECK_POSIX(pthread_mutex_lock(H_LOCK(hash)));
-    pthread_cleanup_push(fd_cleanup_mutex, H_LOCK(hash));
-
-    /* If the session did not exist, we can create it & link it in global tables */
-
-    CHECK_MALLOC_DO(sess = new_session(sid, sidlen, hash),
-                    {
-                        ret = ENOMEM;
-                        free(sid);
-                        goto out;
-                    });
-
-    fd_list_insert_before(li, &sess->chain_h); /* hash table */
-    sess->msg_cnt++;
-
-    /* We must insert in the expiry list */
-    CHECK_POSIX(pthread_mutex_lock(&exp_lock));
-    pthread_cleanup_push(fd_cleanup_mutex, &exp_lock);
-
-    /* Find the position in that list. We take it in reverse order */
-    for (li = exp_sentinel.prev; li != &exp_sentinel; li = li->prev)
-    {
-        struct session *s = (struct session *)(li->o);
-        if (TS_IS_INFERIOR(&s->timeout, &sess->timeout))
-            break;
-    }
-    fd_list_insert_after(li, &sess->expire);
-    sess_cnt++;
-
-    /* We added a new expiring element, we must signal */
-    if (li == &exp_sentinel)
-    {
-        CHECK_POSIX_DO(pthread_cond_signal(&exp_cond), { ASSERT(0); }); /* if it fails, we might not pop the cleanup handlers, but this should not happen -- and we'd have a serious problem otherwise */
-    }
-
-    /* We're done with the locked part */
-    pthread_cleanup_pop(0);
-    CHECK_POSIX_DO(pthread_mutex_unlock(&exp_lock), { ASSERT(0); }); /* if it fails, we might not pop the cleanup handler, but this should not happen -- and we'd have a serious problem otherwise */
-
-out:;
-    pthread_cleanup_pop(0);
-    CHECK_POSIX(pthread_mutex_unlock(H_LOCK(hash)));
-
-    if (ret) /* in case of error */
-        return ret;
-
-    *session = sess;
-    return 0;
 }
