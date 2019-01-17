@@ -61,7 +61,7 @@ pool_declare(pcrf_gx_rx_sess_pool,
              struct rx_sess_state, MAX_POOL_OF_DIAMETER_SESS);
 
 static void pcrf_gx_raa_cb(void *data, struct msg **msg);
-static void get_gx_state(struct sess_state *sess_data);
+static struct sess_state * get_gx_state();
 int fd_sess_restore(struct session **session, uint8_t *sid, size_t sidlen);
 
 static status_t encode_pcc_rule_definition(
@@ -1825,7 +1825,7 @@ static status_t update_qos(
     return CORE_OK;
 }
 
-static sess_state * get_gx_state()
+static struct sess_state * get_gx_state()
 {   
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->cc_request_type = (c_uint32_t)1;
