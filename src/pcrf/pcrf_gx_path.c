@@ -1280,7 +1280,8 @@ status_t pcrf_gx_init(void)
     d_assert(ret == 0, return CORE_ERROR, );
 
     struct sess_state sess_data;
-    struct sess_state *sess_ptr = &sess_data; 
+    struct sess_state *sess_ptr = &sess_data;
+
     get_gx_state(&sess_data);
 
     printf("\n\n------------init---------------\n");
@@ -1828,8 +1829,8 @@ static status_t update_qos(
 }
 
 static void get_gx_state(struct sess_state *sess_data)
-{
-    sess_data->sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
+{   
+    sess_data = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_data->cc_request_type = (c_uint32_t)1;
     sess_data->peer_host = (os0_t) "pcrf.open-ims.test";
     sess_data->imsi_bcd = "ims";
