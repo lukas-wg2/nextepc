@@ -1829,7 +1829,6 @@ static status_t update_qos(
 
 static struct sess_state * get_gx_state()
 {   
-    char buf[CORE_ADDRSTRLEN];
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->cc_request_type = (c_uint32_t)1;
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
@@ -1839,7 +1838,12 @@ static struct sess_state * get_gx_state()
     sess_ptr->ipv6 = (c_uint8_t)0;
     sess_ptr->reserved = (c_uint8_t)0;
     inet_pton(AF_INET, "45.45.0.3", &sess_ptr->addr);
-    printf("setting addr4: %s from uint32_t %u", INET_NTOP(sess_ptr->addr, buf), sess_ptr->addr);
+    unsigned char bytes[4];
+    bytes[0] = sess_ptr->addr & 0xFF;
+    bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
+    bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
+    bytes[3] = (sess_ptr->addr >> 24) & 0xFF;   
+    printf("ip is: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
