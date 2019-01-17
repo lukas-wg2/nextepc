@@ -1282,7 +1282,7 @@ status_t pcrf_gx_init(void)
     struct sess_state sess_data;
     struct sess_state *sess_ptr = &sess_data;
 
-    get_gx_state(&sess_data);
+    get_gx_state(sess_ptr);
 
     printf("\n\n------------init---------------\n");
     printf("sid: %s\n", sess_data.sid);
