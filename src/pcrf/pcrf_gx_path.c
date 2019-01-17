@@ -1845,7 +1845,7 @@ static struct sess_state * get_gx_state()
     bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
     bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
     bytes[3] = (sess_ptr->addr >> 24) & 0xFF;   
-    printf("ip is: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
+    printf("(gx) ip is: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
