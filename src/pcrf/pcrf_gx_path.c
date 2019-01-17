@@ -1279,9 +1279,7 @@ status_t pcrf_gx_init(void)
     ret = fd_disp_app_support(gx_application, fd_vendor, 1, 0);
     d_assert(ret == 0, return CORE_ERROR, );
 
-    struct sess_state *sess_ptr;
-
-    get_gx_state(sess_ptr);
+    struct sess_state *sess_ptr = get_gx_state();
 
     printf("\n\n------------init---------------\n");
     printf("sid: %s\n", sess_ptr->sid);
@@ -1827,9 +1825,9 @@ static status_t update_qos(
     return CORE_OK;
 }
 
-static void get_gx_state(struct sess_state *sess_ptr)
+static sess_state * get_gx_state()
 {   
-    sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
+    struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->cc_request_type = (c_uint32_t)1;
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
     sess_ptr->imsi_bcd = "ims";
@@ -1841,4 +1839,5 @@ static void get_gx_state(struct sess_state *sess_ptr)
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
+    return sess_ptr;
 }
