@@ -145,7 +145,7 @@ static int pcrf_rx_aar_cb( struct msg **msg, struct avp *avp,
     {
         ret = fd_msg_avp_hdr(avp, &hdr);
         d_assert(ret == 0, return EINVAL,);
-        gx_sid = (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
+        gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";//(os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
         if (!gx_sid)
         {
             d_warn("Cannot find Gx Sesson for IPv4:%s\n",
