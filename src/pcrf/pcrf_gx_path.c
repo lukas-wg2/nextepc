@@ -1292,9 +1292,12 @@ status_t pcrf_gx_init(void)
     printf("ipv4: %u\n", sess_ptr->ipv4);
     printf("ipv6: %u\n", sess_ptr->ipv6);
     printf("reserved: %u\n", sess_ptr->reserved);
-    //char addrstr[16];
-    //inet_ntop(AF_INET, &(sess_data->addr), addrstr, INET_ADDRSTRLEN);
-    printf("addr4: %s\n", INET_NTOP(sess_ptr->addr, buf));
+    unsigned char bytes[4];
+    bytes[0] = sess_ptr->addr & 0xFF;
+    bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
+    bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
+    bytes[3] = (sess_ptr->addr >> 24) & 0xFF;   
+    printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
     printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
            sess_ptr->addr6[0], sess_ptr->addr6[1], sess_ptr->addr6[2], sess_ptr->addr6[3],
            sess_ptr->addr6[4], sess_ptr->addr6[5], sess_ptr->addr6[6], sess_ptr->addr6[7],
@@ -1837,7 +1840,7 @@ static struct sess_state * get_gx_state()
     sess_ptr->ipv4 = (c_uint8_t)1;
     sess_ptr->ipv6 = (c_uint8_t)0;
     sess_ptr->reserved = (c_uint8_t)0;
-    inet_pton(AF_INET, "45.45.0.3", &sess_ptr->addr);
+    inet_pton(AF_INET, "3.0.45.45", &sess_ptr->addr);
     unsigned char bytes[4];
     bytes[0] = sess_ptr->addr & 0xFF;
     bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
