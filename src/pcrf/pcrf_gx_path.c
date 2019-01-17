@@ -1835,7 +1835,7 @@ static void get_gx_state(struct sess_state *sess_data)
     sess_data->ipv4 = (c_uint8_t)1;
     sess_data->ipv6 = (c_uint8_t)0;
     sess_data->reserved = (c_uint8_t)0;
-    inet_pton(AF_INET, "45.45.0.3", sess_data->addr);;
+    inet_pton(AF_INET, "45.45.0.3", &sess_data->addr);;
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_data->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_data->ts);
