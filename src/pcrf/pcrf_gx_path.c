@@ -5,7 +5,7 @@
 #include "core_pool.h"
 #include "core_pkbuf.h"
 
-#include "inet.h"
+#include <arpa/inet.h>
 
 #include "fd/fd_lib.h"
 #include "fd/gx/gx_dict.h"
