@@ -1289,7 +1289,7 @@ status_t pcrf_gx_init(void)
     printf("peer_host: %s\n", sess_ptr->peer_host);
     printf("imsi_bcd: %s\n", sess_ptr->imsi_bcd);
     printf("apn: %s\n", sess_ptr->apn);
-    printf("ipv4: %u\n", INET_NTOP(sess_ptr->addr, buf));
+    printf("ipv4: %s\n", INET_NTOP(sess_ptr->addr, buf));
     printf("ipv6: %u\n", sess_ptr->ipv6);
     printf("reserved: %u\n", sess_ptr->reserved);
     //char addrstr[16];
