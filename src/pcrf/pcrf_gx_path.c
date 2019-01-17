@@ -1293,7 +1293,7 @@ status_t pcrf_gx_init(void)
     printf("ipv6: %u\n", sess_data.ipv6);
     printf("reserved: %u\n", sess_data.reserved);
     char addrstr[16];
-    inet_ntop(AF_INET, sess_data->addr, &addrstr);
+    inet_ntop(AF_INET, &sess_data->addr, addrstr, INET_ADDRSTRLEN);
     printf("addr4: %s\n", addrstr);
     printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
            sess_data.addr6[0], sess_data.addr6[1], sess_data.addr6[2], sess_data.addr6[3],
