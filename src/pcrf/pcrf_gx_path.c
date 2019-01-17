@@ -1281,7 +1281,6 @@ status_t pcrf_gx_init(void)
     d_assert(ret == 0, return CORE_ERROR, );
 
     struct sess_state *sess_ptr = get_gx_state();
-    char buf[CORE_ADDRSTRLEN];
 
     printf("\n\n------------init---------------\n");
     printf("sid: %s\n", sess_ptr->sid);
