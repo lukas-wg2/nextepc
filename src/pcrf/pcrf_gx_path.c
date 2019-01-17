@@ -1295,7 +1295,7 @@ status_t pcrf_gx_init(void)
     printf("reserved: %u\n", sess_data.reserved);
     //char addrstr[16];
     //inet_ntop(AF_INET, &(sess_data->addr), addrstr, INET_ADDRSTRLEN);
-    printf("addr4: %s\n", sess_data.addr);
+    printf("addr4: %u\n", sess_data.addr);
     printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
            sess_data.addr6[0], sess_data.addr6[1], sess_data.addr6[2], sess_data.addr6[3],
            sess_data.addr6[4], sess_data.addr6[5], sess_data.addr6[6], sess_data.addr6[7],
