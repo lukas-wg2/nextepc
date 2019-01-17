@@ -1846,6 +1846,5 @@ static void get_gx_state(struct sess_state *sess_data)
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_data->addr6, ipv6addr, IPV6_LEN);
 
-    sess_data->ts.tv_sec = (__kernel_time_t) clock_gettime(CLOCK_REALTIME, &sess_data->ts);
-    sess_data->ts.tv_nsec = (long)0;
+    clock_gettime(CLOCK_REALTIME, &sess_data->ts);
 }
