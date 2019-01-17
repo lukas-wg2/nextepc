@@ -1825,26 +1825,16 @@ static status_t update_qos(
 
 static void get_gx_state(struct sess_state *sess_data)
 {
-
     sess_data->sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
-    //sid
     sess_data->cc_request_type = (c_uint32_t)1;
-
     sess_data->peer_host = (os0_t) "pcrf.open-ims.test";
-    //peer-host
     sess_data->imsi_bcd = "ims";
-    //imsi_bcd
     sess_data->apn = "ims";
-    //apn
     sess_data->ipv4 = (c_uint8_t)1;
-    //ipv4
     sess_data->ipv6 = (c_uint8_t)0;
-    //ipv6
     sess_data->reserved = (c_uint8_t)0;
-    //ipv6
-    sess_data->addr = (c_uint32_t)50343213;
+    core_inet_pton(AF_INET, "45.45.0.3", sess_data->addr);;
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_data->addr6, ipv6addr, IPV6_LEN);
-
     clock_gettime(CLOCK_REALTIME, &sess_data->ts);
 }
