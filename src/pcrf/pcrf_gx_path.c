@@ -4,6 +4,7 @@
 #include "core_debug.h"
 #include "core_pool.h"
 #include "core_pkbuf.h"
+#include "core_network.h"
 
 #include <arpa/inet.h>
 
@@ -1280,6 +1281,7 @@ status_t pcrf_gx_init(void)
     d_assert(ret == 0, return CORE_ERROR, );
 
     struct sess_state *sess_ptr = get_gx_state();
+    char buf[CORE_ADDRSTRLEN];
 
     printf("\n\n------------init---------------\n");
     printf("sid: %s\n", sess_ptr->sid);
@@ -1287,7 +1289,7 @@ status_t pcrf_gx_init(void)
     printf("peer_host: %s\n", sess_ptr->peer_host);
     printf("imsi_bcd: %s\n", sess_ptr->imsi_bcd);
     printf("apn: %s\n", sess_ptr->apn);
-    printf("ipv4: %u\n", sess_ptr->ipv4);
+    printf("ipv4: %u\n", INET_NTOP(sess_ptr->addr, buf));
     printf("ipv6: %u\n", sess_ptr->ipv6);
     printf("reserved: %u\n", sess_ptr->reserved);
     //char addrstr[16];
