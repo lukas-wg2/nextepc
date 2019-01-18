@@ -321,7 +321,7 @@ static int pcrf_gx_ccr_cb(struct msg **msg, struct avp *avp,
         bytes[1] = (sess_data->addr >> 8) & 0xFF;
         bytes[2] = (sess_data->addr >> 16) & 0xFF;
         bytes[3] = (sess_data->addr >> 24) & 0xFF;
-        printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
+        printf("addr4: %d.%d.%d.%d\n", bytes[0], bytes[1], bytes[2], bytes[3]);
         pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
         sess_data->ipv4 = 1;
     }
@@ -702,7 +702,12 @@ out:
         printf("ipv4: %u\n", sess_data->ipv4);
         printf("ipv6: %u\n", sess_data->ipv6);
         printf("reserved: %u\n", sess_data->reserved);
-        printf("addr4: %u\n", sess_data->addr);
+        unsigned char bytes[4];
+        bytes[0] = sess_data->addr & 0xFF;
+        bytes[1] = (sess_data->addr >> 8) & 0xFF;
+        bytes[2] = (sess_data->addr >> 16) & 0xFF;
+        bytes[3] = (sess_data->addr >> 24) & 0xFF;
+        printf("addr4: %d.%d.%d.%d\n", bytes[0], bytes[1], bytes[2], bytes[3]);
         printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
                sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3],
                sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7],
