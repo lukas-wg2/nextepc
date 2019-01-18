@@ -158,7 +158,7 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         gx_sid = (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
         if (!gx_sid)
         {
-            d_warn("Cannot find Gx Sesson for IPv4:%s\n",
+            d_warn("Cannot find Gx Session for IPv4:%s\n",
                    INET_NTOP(hdr->avp_value->os.data, buf));
         }
     }
@@ -181,7 +181,7 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
             gx_sid = (os0_t)pcrf_sess_find_by_ipv6(paa->addr6);
             if (!gx_sid)
             {
-                d_warn("Cannot find Gx Sesson for IPv6:%s\n",
+                d_warn("Cannot find Gx Session for IPv6:%s\n",
                        INET6_NTOP(hdr->avp_value->os.data, buf));
             }
         }
