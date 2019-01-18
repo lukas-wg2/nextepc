@@ -149,10 +149,10 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         printf("found sid: %s\n", (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data));
         uint8_t bytes[4];
         
-        bytes[0] = hdr->avp_value->os.data;
-        bytes[1] = hdr->avp_value->os.data+1;
-        bytes[2] = hdr->avp_value->os.data+2;
-        bytes[3] = hdr->avp_value->os.data+3;
+        bytes[0] = (uint8_t) hdr->avp_value->os.data;
+        bytes[1] = (uint8_t) hdr->avp_value->os.data+1;
+        bytes[2] = (uint8_t) hdr->avp_value->os.data+2;
+        bytes[3] = (uint8_t) hdr->avp_value->os.data+3;
         printf("(rx) ip is: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
         
         printf("ip is %s\n", hdr->avp_value->os.data);
