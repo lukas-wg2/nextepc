@@ -237,7 +237,7 @@ static int pcrf_gx_ccr_cb(struct msg **msg, struct avp *avp,
 
     if (!sess_data)
     {
-        printf("no session data\n");
+        printf("Gx: no session data\n");
         os0_t sid;
         size_t sidlen;
 
@@ -1326,7 +1326,7 @@ status_t pcrf_gx_init(void)
 
     struct session *sess;
     int new;
-    new = pcrf_sess_set_ipv4(&sess_ptr->addr, sess_ptr->sid);
+    new = pcrf_sess_set_ipv4(&(sess_ptr->addr), sess_ptr->sid);
     printf("store with ip ok = %d (expect 0)", new);
     new = 0;
     fd_sess_fromsid(sess_ptr->sid, strlen((char *)sess_ptr->sid), &sess, &new);
@@ -1856,7 +1856,7 @@ static struct sess_state *get_gx_state()
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->cc_request_type = (c_uint32_t)1;
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
-    sess_ptr->imsi_bcd = (c_int8_t *)"240064000003490";
+    sess_ptr->imsi_bcd = "ims";
     sess_ptr->apn = "ims";
     sess_ptr->ipv4 = (c_uint8_t)1;
     sess_ptr->ipv6 = (c_uint8_t)0;

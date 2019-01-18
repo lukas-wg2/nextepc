@@ -103,6 +103,7 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
     d_assert(ret == 0, return EINVAL, );
     if (!sess_data)
     {
+        printf("Rx: no session data\n");
         os0_t sid = NULL;
         ret = fd_sess_getsid(sess, &sid, &sidlen);
         d_assert(ret == 0, return EINVAL, );
@@ -833,6 +834,8 @@ status_t pcrf_rx_init(void)
     ret = fd_disp_app_support(rx_application, fd_vendor, 1, 0);
     d_assert(ret == 0, return CORE_ERROR, );
 
+    struct sess_state *sess_ptr = get_rx_state();
+    
     return CORE_OK;
 }
 
@@ -857,4 +860,43 @@ void pcrf_rx_final(void)
             pool_used(&pcrf_rx_sess_pool), pool_size(&pcrf_rx_sess_pool));
 
     pool_final(&pcrf_rx_sess_pool);
+}
+
+struct sess_state
+{
+    os0_t rx_sid; /* Rx Session-Id */
+    os0_t gx_sid; /* Gx Session-Id */
+
+    os0_t peer_host; /* Peer Host */
+
+#define SESSION_ABORTED 1
+    int state;
+
+    int abort_cause;
+    int termination_cause;
+
+    struct timespec ts; /* Time of sending the message */
+};
+
+static struct sess_state *get_rx_state()
+{
+    struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
+    sess_ptr->cc_request_type = (c_uint32_t)1;
+    sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
+    sess_ptr->imsi_bcd = "ims";
+    sess_ptr->apn = "ims";
+    sess_ptr->ipv4 = (c_uint8_t)1;
+    sess_ptr->ipv6 = (c_uint8_t)0;
+    sess_ptr->reserved = (c_uint8_t)0;
+    sess_ptr->addr = (c_uint32_t)0x2d2d0003;
+    uint8_t bytes[4];
+    bytes[3] = sess_ptr->addr & 0xFF;
+    bytes[2] = (sess_ptr->addr >> 8) & 0xFF;
+    bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
+    bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
+    printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
+    c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
+    clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
+    return sess_ptr;
 }
