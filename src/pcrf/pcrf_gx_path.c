@@ -1326,7 +1326,9 @@ status_t pcrf_gx_init(void)
 
     struct session *sess;
     int new;
-    pcrf_sess_set_ipv4(&sess_ptr->addr, sess_ptr->sid);
+    new = pcrf_sess_set_ipv4(&sess_ptr->addr, sess_ptr->sid);
+    printf("store with ip ok = %d (expect 0)", new);
+    new = 0;
     fd_sess_fromsid(sess_ptr->sid, strlen((char *)sess_ptr->sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, sess, &sess_ptr);
 
