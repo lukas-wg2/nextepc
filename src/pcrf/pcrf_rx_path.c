@@ -149,6 +149,22 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         ret = fd_msg_avp_hdr(avp, &hdr);
         d_assert(ret == 0, return EINVAL, );
         printf("found sid: %s\n", (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data));
+        pcrf_context_t *pcrfctx = pcrf_self();
+        hash_t *ht = pcrfctx->ip_hash;
+        hash_index_t *hi;
+        void *val;
+        void *key;
+        uint8_t ip;
+        uint8_t string;
+        int sum = 0;
+        printf("hashtable content\n");
+        for (hi = hash_first(ht); hi; hi = hash_next(hi))
+        {
+            hash_this(hi, &key, NULL, &val);
+            ip = *(uint8_t *)key;
+            string = (uint8_t *)val;
+            printf("ipkey: %u\nsid: %s\n", ip, string);
+        }
         uint8_t bytes[4];
         bytes[0] = (uint8_t) * (hdr->avp_value->os.data);
         bytes[1] = (uint8_t) * (hdr->avp_value->os.data + 1);
@@ -156,7 +172,7 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         bytes[3] = (uint8_t) * (hdr->avp_value->os.data + 3);
         printf("(rx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
 
-        //gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION"; 
+        //gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
         gx_sid = (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
         if (!gx_sid)
         {
@@ -836,7 +852,7 @@ status_t pcrf_rx_init(void)
     d_assert(ret == 0, return CORE_ERROR, );
 
     struct sess_state *sess_ptr = get_rx_state();
-    
+
     return CORE_OK;
 }
 
