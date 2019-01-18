@@ -898,7 +898,9 @@ struct sess_state
 static struct sess_state *get_rx_state()
 {
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
+    sess_ptr->gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
+    /*
     sess_ptr->addr = (c_uint32_t)0x2d2d0003;
     uint8_t bytes[4];
     bytes[3] = sess_ptr->addr & 0xFF;
@@ -906,6 +908,7 @@ static struct sess_state *get_rx_state()
     bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
     bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
+    */
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
     return sess_ptr;
 }
