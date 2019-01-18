@@ -860,13 +860,12 @@ status_t pcrf_rx_init(void)
     void *key;
     uint8_t ip;
     uint8_t string;
-    int sum = 0;
     printf("hashtable content\n");
     for (hi = hash_first(ht); hi; hi = hash_next(hi))
     {
         hash_this(hi, &key, NULL, &val);
         ip = *(uint8_t*) key;
-        string = (uint8_t*) val;
+        string = *(uint8_t*) val;
         printf("ipkey: %u\nsid: %s\n", ip, string);
     }
 
