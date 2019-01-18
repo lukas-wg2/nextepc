@@ -147,13 +147,15 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         ret = fd_msg_avp_hdr(avp, &hdr);
         d_assert(ret == 0, return EINVAL, );
         printf("found sid: %s", (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data));
-        unsigned char bytes[4];
+        /*unsigned char bytes[4];
         uint32_t ip = (uint32_t) hdr->avp_value->os.data;
         bytes[0] = ip & 0xFF;
         bytes[1] = (ip >> 8) & 0xFF;
         bytes[2] = (ip >> 16) & 0xFF;
         bytes[3] = (ip >> 24) & 0xFF;
         printf("(rx) ip is: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
+        */
+        printf("ip is %s\n", avpdata->avp_value->os.data);
         gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION"; //(os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
         if (!gx_sid)
         {
