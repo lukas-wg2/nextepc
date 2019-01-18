@@ -1846,6 +1846,7 @@ static struct sess_state * get_gx_state()
     bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
     bytes[0] = (sess_ptr->addr >> 24) & 0xFF;   
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
+    pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
