@@ -317,10 +317,10 @@ static int pcrf_gx_ccr_cb(struct msg **msg, struct avp *avp,
                sizeof sess_data->addr);
         printf("framed ip: ");
         unsigned char bytes[4];
-        bytes[0] = sess_ptr->addr & 0xFF;
-        bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
-        bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
-        bytes[3] = (sess_ptr->addr >> 24) & 0xFF;
+        bytes[0] = sess_data->addr & 0xFF;
+        bytes[1] = (sess_data->addr >> 8) & 0xFF;
+        bytes[2] = (sess_data->addr >> 16) & 0xFF;
+        bytes[3] = (sess_data->addr >> 24) & 0xFF;
         printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
         pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
         sess_data->ipv4 = 1;
