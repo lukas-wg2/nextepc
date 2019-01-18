@@ -62,7 +62,7 @@ pool_declare(pcrf_gx_rx_sess_pool,
              struct rx_sess_state, MAX_POOL_OF_DIAMETER_SESS);
 
 static void pcrf_gx_raa_cb(void *data, struct msg **msg);
-static struct sess_state * get_gx_state();
+static struct sess_state *get_gx_state();
 int fd_sess_restore(struct session **session, uint8_t *sid, size_t sidlen);
 
 static status_t encode_pcc_rule_definition(
@@ -237,6 +237,7 @@ static int pcrf_gx_ccr_cb(struct msg **msg, struct avp *avp,
 
     if (!sess_data)
     {
+        printf("no session data\n");
         os0_t sid;
         size_t sidlen;
 
@@ -308,11 +309,19 @@ static int pcrf_gx_ccr_cb(struct msg **msg, struct avp *avp,
     d_assert(ret == 0, return EINVAL, );
     if (avp)
     {
+        printf("framed ip4\n");
         ret = fd_msg_avp_hdr(avp, &hdr);
         d_assert(ret == 0, return EINVAL, );
 
         memcpy(&sess_data->addr, hdr->avp_value->os.data,
                sizeof sess_data->addr);
+        printf("framed ip: ");
+        unsigned char bytes[4];
+        bytes[0] = sess_ptr->addr & 0xFF;
+        bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
+        bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
+        bytes[3] = (sess_ptr->addr >> 24) & 0xFF;
+        printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
         pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
         sess_data->ipv4 = 1;
     }
@@ -1295,7 +1304,7 @@ status_t pcrf_gx_init(void)
     bytes[0] = sess_ptr->addr & 0xFF;
     bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
     bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
-    bytes[3] = (sess_ptr->addr >> 24) & 0xFF;   
+    bytes[3] = (sess_ptr->addr >> 24) & 0xFF;
     printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
     printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
            sess_ptr->addr6[0], sess_ptr->addr6[1], sess_ptr->addr6[2], sess_ptr->addr6[3],
@@ -1308,7 +1317,7 @@ status_t pcrf_gx_init(void)
     struct session *sess;
     int new;
     pcrf_sess_set_ipv4(&sess_ptr->addr, sess_ptr->sid);
-    fd_sess_fromsid(sess_ptr->sid, strlen((char *) sess_ptr->sid), &sess, &new);
+    fd_sess_fromsid(sess_ptr->sid, strlen((char *)sess_ptr->sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, sess, &sess_ptr);
 
     return CORE_OK;
@@ -1830,8 +1839,8 @@ static status_t update_qos(
     return CORE_OK;
 }
 
-static struct sess_state * get_gx_state()
-{   
+static struct sess_state *get_gx_state()
+{
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->cc_request_type = (c_uint32_t)1;
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
@@ -1840,12 +1849,12 @@ static struct sess_state * get_gx_state()
     sess_ptr->ipv4 = (c_uint8_t)1;
     sess_ptr->ipv6 = (c_uint8_t)0;
     sess_ptr->reserved = (c_uint8_t)0;
-    sess_ptr->addr = (c_uint32_t) 0x2d2d0003;
+    sess_ptr->addr = (c_uint32_t)0x2d2d0003;
     uint8_t bytes[4];
     bytes[3] = sess_ptr->addr & 0xFF;
     bytes[2] = (sess_ptr->addr >> 8) & 0xFF;
     bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
-    bytes[0] = (sess_ptr->addr >> 24) & 0xFF;   
+    bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);

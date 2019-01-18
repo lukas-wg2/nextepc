@@ -17,7 +17,7 @@
 
 #define MAX_NUM_SESSION_STATE 32
 
-static struct dict_object * dict_avp_SI  = NULL; /* Session-Id */
+static struct dict_object *dict_avp_SI = NULL; /* Session-Id */
 
 static struct session_handler *pcscf_rx_reg = NULL;
 static struct disp_hdl *hdl_rx_fb = NULL;
@@ -89,8 +89,8 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     d_assert(ip, return, );
     rv = core_ipsubnet(&ipsub, ip, NULL);
     d_assert(rv == CORE_OK, return, );
-    printf("subip: %u.%u.%u.%u", 
-    ipsub.sub[0], ipsub.sub[1], ipsub.sub[2], ipsub.sub[3]);
+    printf("subip: %u.%u.%u.%u\n",
+           ipsub.sub[0]);
     /* Create the request */
     ret = fd_msg_new(rx_cmd_aar, MSGFL_ALLOC_ETEID, &req);
     d_assert(ret == 0, return, );
@@ -128,7 +128,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
 
         */
         {
-            printf("new session for rx");
+            printf("new session for rx\n");
             union avp_value val;
             struct avp *avp = NULL;
             struct session *sess = NULL;
@@ -138,7 +138,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
 
             /* Create the session */
             //fd_sess_new(&sess, fd_g_config->cnf_diamid, fd_g_config->cnf_diamid_len, opt, optlen);
-            
+
             fd_sess_fromsid(sid, sidlen, &sess, &new);
             fd_sess_getsid(sess, &sid, &sidlen);
 
@@ -169,7 +169,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     ret = fd_sess_state_retrieve(pcscf_rx_reg, session, &sess_data);
     if (!sess_data)
     {
-        printf("no session data");
+        printf("no session data\n");
         os0_t sid;
         size_t sidlen;
 
@@ -507,7 +507,7 @@ status_t pcscf_fd_init_load_test(void)
     struct disp_when data;
 
     pool_init(&pcscf_rx_sess_pool, MAX_NUM_SESSION_STATE);
-    fd_dict_search( fd_g_config->cnf_dict, DICT_AVP, AVP_BY_NAME, "Session-Id", &dict_avp_SI , ENOENT);
+    fd_dict_search(fd_g_config->cnf_dict, DICT_AVP, AVP_BY_NAME, "Session-Id", &dict_avp_SI, ENOENT);
 
     pcscf_fd_config();
 

@@ -440,7 +440,7 @@ static void pcrf_test(abts_case *tc, void *data)
     printf("test sending CCR \n");
     app_gx_entry();
     core_sleep(time_from_msec(2000));
-    //send_ccr_msg();
+    send_ccr_msg();
 
 
     /* Send AA-Request */
