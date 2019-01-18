@@ -89,7 +89,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     d_assert(ip, return, );
     rv = core_ipsubnet(&ipsub, ip, NULL);
     d_assert(rv == CORE_OK, return, );
-    printf("subip: %u.%u.%u.%u\n",
+    printf("subip: %u\n",
            ipsub.sub[0]);
     /* Create the request */
     ret = fd_msg_new(rx_cmd_aar, MSGFL_ALLOC_ETEID, &req);
