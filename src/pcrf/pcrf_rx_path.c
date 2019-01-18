@@ -853,6 +853,23 @@ status_t pcrf_rx_init(void)
 
     struct sess_state *sess_ptr = get_rx_state();
 
+    pcrf_context_t * pcrfctx = pcrf_self();
+    hash_t * ht = pcrfctx->ip_hash;
+    hash_index_t *hi;
+    void *val;
+    void *key;
+    uint8_t ip;
+    uint8_t string;
+    int sum = 0;
+    printf("hashtable content\n");
+    for (hi = hash_first(ht); hi; hi = hash_next(hi))
+    {
+        hash_this(hi, &key, NULL, &val);
+        ip = *(uint8_t*) key;
+        string = (uint8_t*) val;
+        printf("ipkey: %u\nsid: %s\n", ip, string);
+    }
+
     return CORE_OK;
 }
 
@@ -879,22 +896,6 @@ void pcrf_rx_final(void)
     pool_final(&pcrf_rx_sess_pool);
 }
 
-struct sess_state
-{
-    os0_t rx_sid; /* Rx Session-Id */
-    os0_t gx_sid; /* Gx Session-Id */
-
-    os0_t peer_host; /* Peer Host */
-
-#define SESSION_ABORTED 1
-    int state;
-
-    int abort_cause;
-    int termination_cause;
-
-    struct timespec ts; /* Time of sending the message */
-};
-
 static struct sess_state *get_rx_state()
 {
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
@@ -909,6 +910,8 @@ static struct sess_state *get_rx_state()
     bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
     */
+    c_uint32_t gxip = (c_uint32_t)0x2d2d0003;
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
+    pcrf_sess_set_ipv4(&gxip, sess_ptr->gx_sid);
     return sess_ptr;
 }
