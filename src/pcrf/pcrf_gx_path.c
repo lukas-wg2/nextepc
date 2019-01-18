@@ -1326,11 +1326,28 @@ status_t pcrf_gx_init(void)
 
     struct session *sess;
     int new;
-    new = pcrf_sess_set_ipv4(&(sess_ptr->addr), sess_ptr->sid);
-    printf("store with ip ok = %d (expect 0)", new);
+    new = pcrf_sess_set_ipv4(&sess_ptr->addr, sess_ptr->sid);
+    printf("store with ip ok = %d (expect 0)\n", new);
     new = 0;
     fd_sess_fromsid(sess_ptr->sid, strlen((char *)sess_ptr->sid), &sess, &new);
     fd_sess_state_store(pcrf_gx_reg, sess, &sess_ptr);
+
+    pcrf_context_t * pcrfctx = pcrf_self();
+    hash_t * ht = pcrfctx->ip_hash;
+    hash_index_t *hi;
+    void *val;
+    void *key;
+    uint8_t ip;
+    uint8_t string;
+    int sum = 0;
+    printf("hashtable content\n");
+    for (hi = hash_first(ht); hi; hi = hash_next(hi))
+    {
+        hash_this(hi, &key, NULL, &val);
+        ip = *(uint8_t*) key;
+        string = (uint8_t*) val;
+        printf("ipkey: %u\nsid: %s\n", ip, string);
+    }
 
     return CORE_OK;
 }

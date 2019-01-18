@@ -37,6 +37,7 @@ static struct disp_hdl *hdl_rx_str = NULL;
 pool_declare(pcrf_rx_sess_pool, struct sess_state, MAX_POOL_OF_DIAMETER_SESS);
 
 static void pcrf_rx_asa_cb(void *data, struct msg **msg);
+static struct sess_state *get_rx_state();
 
 static __inline__ struct sess_state *new_state(os0_t sid)
 {
@@ -881,13 +882,7 @@ struct sess_state
 static struct sess_state *get_rx_state()
 {
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
-    sess_ptr->cc_request_type = (c_uint32_t)1;
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
-    sess_ptr->imsi_bcd = "ims";
-    sess_ptr->apn = "ims";
-    sess_ptr->ipv4 = (c_uint8_t)1;
-    sess_ptr->ipv6 = (c_uint8_t)0;
-    sess_ptr->reserved = (c_uint8_t)0;
     sess_ptr->addr = (c_uint32_t)0x2d2d0003;
     uint8_t bytes[4];
     bytes[3] = sess_ptr->addr & 0xFF;
@@ -895,8 +890,6 @@ static struct sess_state *get_rx_state()
     bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
     bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
-    c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
     clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
     return sess_ptr;
 }
