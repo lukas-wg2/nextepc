@@ -28,10 +28,10 @@ status_t pcrf_app_initialize(
     {
         d_trace_level(&_pcrfapp, app);
     }
-    d_trace(1, "PCRF try to initialize\n");
+    d_trace(3, "PCRF try to initialize\n");
     rv = pcrf_initialize();
     d_assert(rv == CORE_OK, , "Failed to intialize PCRF");
-    d_trace(1, "PCRF initialize...done\n");
+    d_trace(3, "PCRF initialize...done\n");
 #if 0
   
 #endif

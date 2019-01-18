@@ -89,7 +89,8 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     d_assert(ip, return, );
     rv = core_ipsubnet(&ipsub, ip, NULL);
     d_assert(rv == CORE_OK, return, );
-
+    printf("subip: %u.%u.%u.%u", 
+    ipsub.sub[0], ipsub.sub[1], ipsub.sub[2], ipsub.sub[3]);
     /* Create the request */
     ret = fd_msg_new(rx_cmd_aar, MSGFL_ALLOC_ETEID, &req);
     d_assert(ret == 0, return, );
@@ -127,6 +128,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
 
         */
         {
+            printf("new session for rx");
             union avp_value val;
             struct avp *avp = NULL;
             struct session *sess = NULL;
@@ -167,6 +169,7 @@ void pcscf_rx_send_aar_load_test(c_uint8_t **rx_sid, const char *ip,
     ret = fd_sess_state_retrieve(pcscf_rx_reg, session, &sess_data);
     if (!sess_data)
     {
+        printf("no session data");
         os0_t sid;
         size_t sidlen;
 
