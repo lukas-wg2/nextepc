@@ -1335,14 +1335,13 @@ status_t pcrf_gx_init(void)
     pcrf_context_t * pcrfctx = pcrf_self();
     hash_t * ht = pcrfctx->ip_hash;
     hash_index_t *hi;
-    void *val;
-    void *key;
+    void *val, *key;
     uint8_t ip;
     uint8_t string;
     printf("hashtable content\n");
     for (hi = hash_first(ht); hi; hi = hash_next(hi))
     {
-        hash_this(hi, &key, NULL, &val);
+        hash_this(hi, (void*)&key, NULL, &val);
         ip = *(uint8_t*) key;
         string = *(uint8_t*) val;
         printf("ipkey: %u\nsid: %s\n", ip, string);
