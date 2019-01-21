@@ -1337,13 +1337,13 @@ status_t pcrf_gx_init(void)
     hash_index_t *hi;
     void *val, *key;
     uint8_t ip;
-    uint8_t string;
+    char * string;
     printf("hashtable content\n");
     for (hi = hash_first(ht); hi; hi = hash_next(hi))
     {
         hash_this(hi, (void*)&key, NULL, &val);
         ip = *(uint8_t*) key;
-        string = (uint8_t*) val;
+        string = val;
         printf("ipkey: %u\nsid: %s\n", ip, string);
     }
 

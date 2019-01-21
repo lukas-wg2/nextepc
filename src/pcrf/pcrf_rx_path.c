@@ -154,13 +154,13 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
         hash_index_t *hi;
         void *val, *key;
         uint8_t ip;
-        uint8_t string;
+        char *string;
         printf("hashtable content\n");
         for (hi = hash_first(ht); hi; hi = hash_next(hi))
         {
             hash_this(hi, (void *)&key, NULL, &val);
             ip = *(uint8_t *)key;
-            string = (uint8_t *)val;
+            string = val;
             printf("ipkey: %u\nsid: %s\n", ip, string);
         }
         uint8_t bytes[4];
@@ -851,18 +851,18 @@ status_t pcrf_rx_init(void)
 
     struct sess_state *sess_ptr = get_rx_state();
 
-    pcrf_context_t *pcrfctx = pcrf_self();
-    hash_t *ht = pcrfctx->ip_hash;
+    pcrf_context_t * pcrfctx = pcrf_self();
+    hash_t * ht = pcrfctx->ip_hash;
     hash_index_t *hi;
     void *val, *key;
     uint8_t ip;
-    uint8_t string;
+    char * string;
     printf("hashtable content\n");
     for (hi = hash_first(ht); hi; hi = hash_next(hi))
     {
-        hash_this(hi, (void *)&key, NULL, &val);
-        ip = *(uint8_t *)key;
-        string = (uint8_t *)val;
+        hash_this(hi, (void*)&key, NULL, &val);
+        ip = *(uint8_t*) key;
+        string = val;
         printf("ipkey: %u\nsid: %s\n", ip, string);
     }
 
