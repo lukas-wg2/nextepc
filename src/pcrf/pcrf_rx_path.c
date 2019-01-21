@@ -851,7 +851,7 @@ status_t pcrf_rx_init(void)
 
     struct sess_state *sess_ptr = get_rx_state();
     printf("\n\n------------init-rx------------\n");
-    printf("sid: %s\n", sess_ptr->sid);
+    printf("sid: %s\n", sess_ptr->gx_sid);
 
     pcrf_context_t * pcrfctx = pcrf_self();
     hash_t * ht = pcrfctx->ip_hash;
