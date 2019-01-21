@@ -1343,7 +1343,7 @@ status_t pcrf_gx_init(void)
     {
         hash_this(hi, (void*)&key, NULL, &val);
         ip = *(uint8_t*) key;
-        string = *(uint8_t*) val;
+        string = (uint8_t*) val;
         printf("ipkey: %u\nsid: %s\n", ip, string);
     }
 
