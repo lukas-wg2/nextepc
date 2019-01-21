@@ -849,7 +849,9 @@ status_t pcrf_rx_init(void)
     ret = fd_disp_app_support(rx_application, fd_vendor, 1, 0);
     d_assert(ret == 0, return CORE_ERROR, );
 
-    //struct sess_state *sess_ptr = get_rx_state();
+    struct sess_state *sess_ptr = get_rx_state();
+    printf("\n\n------------init-rx------------\n");
+    printf("sid: %s\n", sess_ptr->sid);
 
     pcrf_context_t * pcrfctx = pcrf_self();
     hash_t * ht = pcrfctx->ip_hash;
