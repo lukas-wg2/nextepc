@@ -725,23 +725,6 @@ out:
     }
     else
     {
-        printf("\n\n------------term-borked---------\n");
-        printf("sid: %s\n", sess_data->sid);
-        printf("cc_request_type: %u\n", sess_data->cc_request_type);
-        printf("peer_host: %s\n", sess_data->peer_host);
-        printf("imsi_bcd: %s\n", core_strdup((char *)hdr->avp_value->os.data));
-        printf("apn: %s\n", core_strdup((char *)hdr->avp_value->os.data));
-        printf("ipv4: %u\n", sess_data->ipv4);
-        printf("ipv6: %u\n", sess_data->ipv6);
-        printf("reserved: %u\n", sess_data->reserved);
-        printf("addr4: %u\n", sess_data->addr);
-        printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
-               sess_data->addr6[0], sess_data->addr6[1], sess_data->addr6[2], sess_data->addr6[3],
-               sess_data->addr6[4], sess_data->addr6[5], sess_data->addr6[6], sess_data->addr6[7],
-               sess_data->addr6[8], sess_data->addr6[9], sess_data->addr6[10], sess_data->addr6[11],
-               sess_data->addr6[12], sess_data->addr6[13], sess_data->addr6[14], sess_data->addr6[15]);
-        printf("timespec: %ld %ld\n", sess_data->ts.tv_sec, sess_data->ts.tv_nsec);
-        printf("-------------------------------\n");
         state_cleanup(sess_data, NULL, NULL);
     }
 
@@ -1315,7 +1298,7 @@ status_t pcrf_gx_init(void)
     bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
     bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
     bytes[3] = (sess_ptr->addr >> 24) & 0xFF;
-    printf("addr4: %d.%d.%d.%d\n", bytes[3], bytes[2], bytes[1], bytes[0]);
+    printf("addr4: %d.%d.%d.%d\n", bytes[0], bytes[1], bytes[2], bytes[3]);
     printf("addr6: %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u %u\n",
            sess_ptr->addr6[0], sess_ptr->addr6[1], sess_ptr->addr6[2], sess_ptr->addr6[3],
            sess_ptr->addr6[4], sess_ptr->addr6[5], sess_ptr->addr6[6], sess_ptr->addr6[7],
@@ -1876,12 +1859,12 @@ static struct sess_state *get_gx_state()
     sess_ptr->ipv4 = (c_uint8_t)1;
     sess_ptr->ipv6 = (c_uint8_t)0;
     sess_ptr->reserved = (c_uint8_t)0;
-    sess_ptr->addr = (c_uint32_t)0x2d2d0003;
+    sess_ptr->addr = (c_uint32_t)0x03002d2d; //Network byte order
     uint8_t bytes[4];
-    bytes[3] = sess_ptr->addr & 0xFF;
-    bytes[2] = (sess_ptr->addr >> 8) & 0xFF;
-    bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
-    bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
+    bytes[0] = sess_ptr->addr & 0xFF;
+    bytes[1] = (sess_ptr->addr >> 8) & 0xFF;
+    bytes[2] = (sess_ptr->addr >> 16) & 0xFF;
+    bytes[3] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
     c_uint8_t ipv6addr[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     memcpy(sess_ptr->addr6, ipv6addr, IPV6_LEN);
