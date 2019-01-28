@@ -74,3 +74,6 @@ webui/node_modules/
 
 # dont ignore special config, usable with small tweak
 !test/pcrf-test.conf
+
+# IDE junk
+.vscode/

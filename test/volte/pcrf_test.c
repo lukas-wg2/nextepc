@@ -30,7 +30,7 @@
 
 #define AUTH_APP_ID 16777238
 #define VENDOR_ID_3GPP 10415
-#define SENT_AAR 10000
+#define SENT_AAR 1
 
 struct dict_object *ccr_cmd = NULL;
 struct dict_object *cca_cmd = NULL;
