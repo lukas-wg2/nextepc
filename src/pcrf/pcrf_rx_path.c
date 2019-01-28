@@ -908,8 +908,8 @@ static struct sess_state *get_rx_state()
     bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
     printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
     */
-    c_uint32_t gxip = (c_uint32_t)0x2d2d0003;
-    clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
-    pcrf_sess_set_ipv4(&gxip, sess_ptr->gx_sid);
+    //c_uint32_t gxip = (c_uint32_t)0x2d2d0003;
+    //clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
+    //pcrf_sess_set_ipv4(&gxip, sess_ptr->gx_sid);
     return sess_ptr;
 }
