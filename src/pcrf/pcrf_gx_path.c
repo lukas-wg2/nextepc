@@ -300,6 +300,9 @@ static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp,
         memcpy(&sess_data->addr, hdr->avp_value->os.data,
                 sizeof sess_data->addr);
 
+        pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
+        sess_data->ipv4 = 1;
+
         pcrf_context_t *pcrfctx = pcrf_self();
         hash_t *ht = pcrfctx->ip_hash;
         hash_index_t *hi;
@@ -320,9 +323,6 @@ static int pcrf_gx_ccr_cb( struct msg **msg, struct avp *avp,
         bytes[2] = (uint8_t) * (hdr->avp_value->os.data + 2);
         bytes[3] = (uint8_t) * (hdr->avp_value->os.data + 3);
         printf("(rx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
-        
-        pcrf_sess_set_ipv4(&sess_data->addr, sess_data->sid);
-        sess_data->ipv4 = 1;
     }
 
     /* Get Framed-IPv6-Prefix */
