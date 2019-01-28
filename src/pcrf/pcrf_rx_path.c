@@ -104,7 +104,6 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
     d_assert(ret == 0, return EINVAL, );
     if (!sess_data)
     {
-        printf("Rx: no session data\n");
         os0_t sid = NULL;
         ret = fd_sess_getsid(sess, &sid, &sidlen);
         d_assert(ret == 0, return EINVAL, );
@@ -148,28 +147,7 @@ static int pcrf_rx_aar_cb(struct msg **msg, struct avp *avp,
     {
         ret = fd_msg_avp_hdr(avp, &hdr);
         d_assert(ret == 0, return EINVAL, );
-        printf("found sid: %s\n", (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data));
-        pcrf_context_t *pcrfctx = pcrf_self();
-        hash_t *ht = pcrfctx->ip_hash;
-        hash_index_t *hi;
-        void *val, *key;
-        uint8_t ip;
-        char *string;
-        printf("hashtable content\n");
-        for (hi = hash_first(ht); hi; hi = hash_next(hi))
-        {
-            hash_this(hi, (void *)&key, NULL, &val);
-            ip = *(uint8_t *)key;
-            string = val;
-            printf("ipkey: %u\nsid: %s\n", ip, string);
-        }
-        uint8_t bytes[4];
-        bytes[0] = (uint8_t) * (hdr->avp_value->os.data);
-        bytes[1] = (uint8_t) * (hdr->avp_value->os.data + 1);
-        bytes[2] = (uint8_t) * (hdr->avp_value->os.data + 2);
-        bytes[3] = (uint8_t) * (hdr->avp_value->os.data + 3);
-        printf("(rx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
-
+        
         //gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
         gx_sid = (os0_t)pcrf_sess_find_by_ipv4(hdr->avp_value->os.data);
         if (!gx_sid)
@@ -849,24 +827,8 @@ status_t pcrf_rx_init(void)
     ret = fd_disp_app_support(rx_application, fd_vendor, 1, 0);
     d_assert(ret == 0, return CORE_ERROR, );
 
+    /* Get the RX states and set them in a similar way in GX init */
     struct sess_state *sess_ptr = get_rx_state();
-    printf("\n\n------------init-rx------------\n");
-    printf("sid: %s\n", sess_ptr->gx_sid);
-
-    pcrf_context_t * pcrfctx = pcrf_self();
-    hash_t * ht = pcrfctx->ip_hash;
-    hash_index_t *hi;
-    void *val, *key;
-    uint8_t ip;
-    char * string;
-    printf("hashtable content\n");
-    for (hi = hash_first(ht); hi; hi = hash_next(hi))
-    {
-        hash_this(hi, (void*)&key, NULL, &val);
-        ip = *(uint8_t*) key;
-        string = val;
-        printf("ipkey: %u\nsid: %s\n", ip, string);
-    }
 
     return CORE_OK;
 }
@@ -899,17 +861,7 @@ static struct sess_state *get_rx_state()
     struct sess_state *sess_ptr = new_state((os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION");
     sess_ptr->gx_sid = (os0_t) "pcrf.open-ims.test;1547586413;1;CCR_SESSION";
     sess_ptr->peer_host = (os0_t) "pcrf.open-ims.test";
-    /*
-    sess_ptr->addr = (c_uint32_t)0x2d2d0003;
-    uint8_t bytes[4];
-    bytes[3] = sess_ptr->addr & 0xFF;
-    bytes[2] = (sess_ptr->addr >> 8) & 0xFF;
-    bytes[1] = (sess_ptr->addr >> 16) & 0xFF;
-    bytes[0] = (sess_ptr->addr >> 24) & 0xFF;
-    printf("(gx) ip is: %u.%u.%u.%u\n", bytes[0], bytes[1], bytes[2], bytes[3]);
-    */
-    //c_uint32_t gxip = (c_uint32_t)0x2d2d0003;
-    //clock_gettime(CLOCK_REALTIME, &sess_ptr->ts);
-    //pcrf_sess_set_ipv4(&gxip, sess_ptr->gx_sid);
+    //if we save rx_sid then here is where they would be added
+    //sess_ptr->rx_sid = (os0_t) "the rx session id here"
     return sess_ptr;
 }
